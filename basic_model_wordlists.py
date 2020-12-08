@@ -29,11 +29,8 @@ extraction_of = 'sentiments'
 
 
 # specify filenames in the next line
-if extraction_of in ['contexts']:
-    filename = r'..data_laptop_ctxt.json'
-    # filename = r'../Labeling/WiSe2020-21/export inception/data_movie_ctxt.json'
-elif extraction_of in ['sentiments','aspects']:
-    filename = r'..data_laptop_absa.json'
+if extraction_of in ['sentiments','aspects']:
+    filename = r'./data_laptop_absa.json'
     # filename = r'../Labeling/WiSe2020-21/export inception/data_movie_absa.json'
 
 
