@@ -107,7 +107,7 @@ for term, labelclass_to_freq in term_to_labelclass_to_freq.items():
     most_freq_labelclass = list(labelclass_to_freq.keys())[index_argmax]
     term_to_most_freq_labelclass[term] = most_freq_labelclass
 
-# -> term_to_most_freq_labelclass is the "mapping" which is used as classifier in this simple exammple
+# -> term_to_most_freq_labelclass is the "mapping" which is used as classifier in this simple example
 # train phase is over
 
 ## evaluation (test classifier)
