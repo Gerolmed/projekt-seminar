@@ -11,7 +11,7 @@ LoadedData = Dict[str, Review]
 
 class LoadingUtils:
     @staticmethod
-    def readData(filename: str, seed: int = 1234567890) -> Data:
+    def read_data(filename: str, seed: int = 1234567890) -> Data:
 
         extraction_of = 'sentiments'
 
