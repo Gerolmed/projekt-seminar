@@ -5,21 +5,26 @@ import numpy as np
 import pandas as pd
 import random
 
+from typing import Dict, Union, List
 
-def load_data(filename) -> object:
-    with open(filename, 'r', encoding='utf8') as infile:
+Tokens = List[str]
+Review = Dict[str, Union[Dict[str, List[str]], Tokens]]
+LoadedData = Dict[str, Review]
+
+def load_data(filename) -> LoadedData:
+    with open(file=filename, mode='r', encoding='utf8') as infile:
         data = json.load(infile)
-        data_new = dict()
-        for k, v in list(data.items()):
-            v_new = data_new.setdefault(k, dict())
-            for k1, v1 in list(v.items()):
-                v1_new = v_new.setdefault(k1, dict())
-                if k1 != 'tokens':
-                    for k2, v2 in list(v1.items()):
+        data_new: LoadedData = dict()
+        for review_id, review_data in list(data.items()):
+            v_new = data_new.setdefault(review_id, dict())
+            for field, field_data in list(review_data.items()):
+                v1_new = v_new.setdefault(field, dict())
+                if field != 'tokens':
+                    for k2, v2 in list(field_data.items()):
                         v2_new = [l.replace('B_', '').replace('I_', '') for l in v2]
                         v1_new[k2] = v2_new
                 else:
-                    v_new[k1] = v1
+                    v_new[field] = field_data
     return data_new
 
 
