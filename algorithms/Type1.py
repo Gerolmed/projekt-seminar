@@ -8,6 +8,10 @@ import pandas as pd
 
 
 class Type1(Algorithm):
+
+    def get_name(self) -> str:
+        return "type_1"
+
     def execute(self, data: Data) -> Result:
         # start classification
 
