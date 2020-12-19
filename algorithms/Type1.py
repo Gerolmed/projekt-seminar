@@ -1,4 +1,4 @@
-from numpy.core._multiarray_umath import ndarray
+
 
 from utils.Algorithm import Algorithm
 from utils.Data import Data
@@ -62,7 +62,7 @@ class Type1(Algorithm):
             if conf_matrix.values[i, i] > 0:
                 precision_per_class[i] = conf_matrix.values[i, i] / sum(conf_matrix.values[:, i])
                 recall_per_class[i] = conf_matrix.values[i, i] / sum(conf_matrix.values[i, :])
-        precision: ndarray = np.mean(precision_per_class)
+        precision = np.mean(precision_per_class)
         recall = np.mean(recall_per_class)
         f1 = 2 * (precision * recall) / (precision + recall)
         return Result(precision, recall, f1)
