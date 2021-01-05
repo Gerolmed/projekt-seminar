@@ -20,6 +20,7 @@ for key, value in results.items():
     print('Precision: ' + str(value.precision))
     print('Recall: ' + str(value.recall))
     print('F1-measure: ' + str(value.f1))
+    print(f'\n{value.confusion_matrix}\n')
     print("============================================")
     print("")
 

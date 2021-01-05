@@ -69,4 +69,4 @@ class Type1(Algorithm):
         precision = np.mean(precision_per_class)
         recall = np.mean(recall_per_class)
         f1 = 2 * (precision * recall) / (precision + recall)
-        return Result(precision, recall, f1)
+        return Result(precision, recall, f1, conf_matrix)
