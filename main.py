@@ -1,6 +1,5 @@
 from typing import List, Dict
 
-from algorithms.NaiveBayes import NaiveBayes
 from algorithms.Type1 import Type1
 from loading.LoadingUtils import LoadingUtils
 from utils.Algorithm import Algorithm
