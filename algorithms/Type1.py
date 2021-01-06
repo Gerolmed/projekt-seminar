@@ -1,7 +1,7 @@
 
 
 from utils.Algorithm import Algorithm
-from utils.Data import Data
+from utils.Data import BasicData
 from utils.Result import Result
 import numpy as np
 import pandas as pd
@@ -12,7 +12,10 @@ class Type1(Algorithm):
     def get_name(self) -> str:
         return "type_1"
 
-    def execute(self, data: Data) -> Result:
+    def get_supported_data_type(self) -> str:
+        return "basic"
+
+    def execute(self, data: BasicData) -> Result:
         # start classification
 
         # train classifier -> generate word lists per labelclass

@@ -1,10 +1,10 @@
+from loading.LoadingUtils import LoadedData
 from utils.Data import Data
-from utils.Algorithm import Algorithm
 
 
-class TrainingData(Algorithm):
+class DataProvider:
 
-    def execute(self, data: Data) -> Data:
+    def execute(self, data: Data, rawData: LoadedData) -> Data:
         """Prepares a specific form of training data"""
         raise Exception("Not implemented")
         pass

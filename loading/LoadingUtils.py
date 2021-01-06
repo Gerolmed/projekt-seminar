@@ -2,7 +2,7 @@ import random
 from typing import Dict, Union, List
 import json
 
-from utils.Data import Data
+from utils.Data import Data, BasicData
 
 Tokens = List[str]
 Review = Dict[str, Union[Dict[str, List[str]], Tokens]]
@@ -11,7 +11,7 @@ LoadedData = Dict[str, Review]
 
 class LoadingUtils:
     @staticmethod
-    def read_data(filename: str, seed: int = 1234567890) -> Data:
+    def read_data(filename: str, seed: int = 1234567890) -> [Data, LoadedData]:
 
         extraction_of = 'sentiments'
 
@@ -58,7 +58,7 @@ class LoadingUtils:
         labelclass_to_id = dict(zip(all_labelclasses, list(range(len(all_labelclasses)))))
 
         n_tags = len(list(labelclass_to_id.keys()))
-        return Data(train_tokens, train_labels, test_tokens, test_labels, n_tags, labelclass_to_id)
+        return [BasicData(train_tokens, train_labels, test_tokens, test_labels, n_tags, labelclass_to_id), rawData]
 
     @staticmethod
     def __open_file(filename: str):

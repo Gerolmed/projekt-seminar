@@ -13,3 +13,8 @@ class Algorithm:
         """Returns the name of the given method"""
         raise Exception("Not implemented")
         pass
+
+    def get_supported_data_type(self) -> str:
+        """Returns the name of the given method"""
+        raise Exception("Not implemented")
+        pass
