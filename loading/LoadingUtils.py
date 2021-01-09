@@ -1,8 +1,12 @@
 import random
 from typing import Dict, Union, List
 import json
+from nltk.corpus import stopwords
 
 from utils.Data import Data, BasicData
+
+stopWords = list(stopwords.words('english'))
+stopWords.extend([".", ",", "!", "(", ")"])
 
 Tokens = List[str]
 Review = Dict[str, Union[Dict[str, List[str]], Tokens]]
@@ -22,6 +26,31 @@ class LoadingUtils:
             tokens = v.get('tokens')
             tokens = [token.lower() for token in tokens]
             rawData[k]['tokens'] = tokens
+
+        def short_array(original: List[str], indexes: List[int]) -> List[str]:
+            new_list = list()
+            for index, value in enumerate(original):
+                if index in indexes:
+                    continue
+                new_list.append(value)
+            return new_list
+
+
+        for i,(k,v) in enumerate(rawData.items()):
+            remove_index = list()
+            tokens = v.get('tokens')
+            for index, token in enumerate(tokens):
+                if token in stopWords:
+                    remove_index.append(index)
+            if len(remove_index) == 0 :
+                continue
+            rawData[k]["tokens"] = short_array(tokens, remove_index)
+            for ind,(key,val) in enumerate(v.items()):
+                if key.__eq__("tokens"):
+                    continue
+                for label_type, rating in val.items():
+                    rawData[k][key][label_type]= short_array(rating, remove_index)
+
 
         keys = list(rawData.keys())
         random.seed(seed)
