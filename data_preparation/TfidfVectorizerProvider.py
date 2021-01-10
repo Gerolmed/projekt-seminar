@@ -35,7 +35,7 @@ class TfidfVectorizerProvider(DataProvider):
                 # TODO: add option to also consider uncertain sentiments
                 sentiment_indices = [i for i, x in enumerate(dataData["sentiments"]) if x == "whatever"]
                 for index, token in enumerate(tokens):
-                    raw_data.append(tokens)
+                    raw_data.append(" ".join(tokens))
                     full_labels.append("sentiment" if index in sentiment_indices else "none")
 
         random.seed(seed)
