@@ -29,7 +29,8 @@ class TfidfVectorizerProvider(DataProvider):
 
         for dataKey, dataValue in rawData.items():
             tokens: List[str] = dataValue.get("tokens")
-            transformed_tokens: List[int] = td.transform(" ".join(tokens)).toArray()[0]
+            raw_transform = td.fit_transform([" ".join(tokens)])
+            transformed_tokens: List[int] = raw_transform.toArray()[0]
             for reviewKey, dataData in dataValue.items():
                 if reviewKey == "tokens":
                     continue
