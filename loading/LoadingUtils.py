@@ -12,10 +12,11 @@ Tokens = List[str]
 Review = Dict[str, Union[Dict[str, List[str]], Tokens]]
 LoadedData = Dict[str, Review]
 
+seed: int = 1234567890
 
 class LoadingUtils:
     @staticmethod
-    def read_data(filename: str, seed: int = 1234567890) -> [Data, LoadedData]:
+    def read_data(filename: str) -> [Data, LoadedData]:
 
         extraction_of = 'sentiments'
 

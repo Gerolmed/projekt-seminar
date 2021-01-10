@@ -1,10 +1,7 @@
 from utils.Algorithm import Algorithm
-from utils.Data import Data
+from utils.Data import TfidfVectorizerData
 from utils.Result import Result
-from loading.LoadingUtils import LoadingUtils
-import numpy as np
-import pandas as pd
-from sklearn.naive_bayes import CategoricalNB
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
 
 
@@ -13,16 +10,15 @@ class NaiveBayes(Algorithm):
     def get_name(self) -> str:
         return "Naive Bayes"
 
-    def execute(self, data: Data) -> Result:
+    def get_supported_data_type(self) -> str:
+        return "tfidf_vectorized"
 
-        train_token_array = []
-        for token in data.train_tokens:
-            train_token_array.append(token)
+    def execute(self, data: TfidfVectorizerData) -> Result:
 
-        model = CategoricalNB()
-        model.fit(train_token_array, data.train_labels)
+        model = MultinomialNB()
+        model.fit(data.train_data, data.train_labels)
 
-        labels_predicted = model.predict(data.test_tokens)
+        labels_predicted = model.predict(data.test_data)
 
         conf_matrix = confusion_matrix(data.test_labels, labels_predicted)
         precision = precision_score(data.test_labels, labels_predicted)

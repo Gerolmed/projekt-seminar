@@ -1,7 +1,8 @@
 from typing import List, Dict
 
+from algorithms.NaiveBayes import NaiveBayes
 from algorithms.Type1 import Type1
-from algorithms.naive_bayes.data_preparation.TfidfVectorizer import TfidfVectorizer
+from data_preparation.TfidfVectorizerProvider import TfidfVectorizerProvider
 from loading.LoadingUtils import LoadingUtils
 from utils.Algorithm import Algorithm
 from utils.Data import Data
@@ -9,8 +10,8 @@ from utils.DataProvider import DataProvider
 from utils.Result import Result
 
 
-algorithms: List[Algorithm] = [Type1()]
-data_providers: List[DataProvider] = [TfidfVectorizer()]
+algorithms: List[Algorithm] = [Type1(), NaiveBayes()]
+data_providers: List[DataProvider] = [TfidfVectorizerProvider()]
 
 
 [basicData, rawData] = LoadingUtils.read_data(filename=r'./data_laptop_absa.json')
