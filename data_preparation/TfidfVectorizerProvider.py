@@ -46,11 +46,10 @@ class TfidfVectorizerProvider(DataProvider):
 
         split_parameter = round(len(full_labels) * 0.7)
 
-        train_data_raw = raw_data[split_parameter:]
-        test_data_raw = raw_data[:split_parameter]
+        transformed_data = td.fit_transform(raw_data)
 
-        train_data = td.fit_transform(train_data_raw)
-        test_data = td.transform(test_data_raw)
+        train_data = transformed_data[split_parameter:]
+        test_data = transformed_data[:split_parameter]
 
         return TfidfVectorizerData(train_data, full_labels[split_parameter:],
                                    test_data, full_labels[:split_parameter])
