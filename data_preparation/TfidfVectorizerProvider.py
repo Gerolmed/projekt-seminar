@@ -33,7 +33,12 @@ class TfidfVectorizerProvider(DataProvider):
                 if reviewKey == "tokens":
                     continue
                 # TODO: add option to also consider uncertain sentiments
-                sentiment_indices = [i for i, x in enumerate(dataData["sentiments"]) if x == "whatever"]
+                sentiment_indices = [i for i, x in enumerate(dataData["sentiments"]) if x.endswith("S")]
+
+                if len(sentiment_indices) == 0:
+                    raw_data.append(" ".join(tokens))
+                    full_labels.append("none")
+
                 for index, sentiment_index in enumerate(sentiment_indices):
                     raw_data.append(" ".join(tokens))
                     full_labels.append(tokens[sentiment_index])
