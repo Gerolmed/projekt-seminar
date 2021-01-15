@@ -21,8 +21,8 @@ class NaiveBayes(Algorithm):
         labels_predicted = model.predict(data.test_data)
 
         conf_matrix = confusion_matrix(data.test_labels, labels_predicted)
-        precision = precision_score(data.test_labels, labels_predicted)
-        recall = recall_score(data.test_labels, labels_predicted)
-        f1 = f1_score(data.test_labels, labels_predicted)
+        precision = precision_score(data.test_labels, labels_predicted, average="micro")
+        recall = recall_score(data.test_labels, labels_predicted, average="micro")
+        f1 = f1_score(data.test_labels, labels_predicted, average="micro")
 
         return Result(precision, recall, f1, conf_matrix)
