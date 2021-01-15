@@ -26,7 +26,8 @@ for data_provider in data_providers:
 
 results: Dict[str, Result] = dict()
 for algorithm in algorithms:
-    result = algorithm.execute(data_dict.get(algorithm.get_supported_data_type()))
+    selected_data = data_dict.get(algorithm.get_supported_data_type())
+    result = algorithm.execute(selected_data)
     results.setdefault(algorithm.get_name(), result)
 
 for key, value in results.items():
