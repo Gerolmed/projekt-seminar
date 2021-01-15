@@ -24,7 +24,7 @@ class TfidfVectorizerProvider(DataProvider):
 
         # Collect data
         # Collect vocabulary
-        raw_data: List[List[str]] = list()
+        raw_data: List[str] = list()
         full_labels: List[str] = list()
 
         for dataKey, dataValue in rawData.items():
@@ -34,9 +34,9 @@ class TfidfVectorizerProvider(DataProvider):
                     continue
                 # TODO: add option to also consider uncertain sentiments
                 sentiment_indices = [i for i, x in enumerate(dataData["sentiments"]) if x == "whatever"]
-                for index, token in enumerate(tokens):
+                for index, sentiment_index in enumerate(sentiment_indices):
                     raw_data.append(" ".join(tokens))
-                    full_labels.append("sentiment" if index in sentiment_indices else "none")
+                    full_labels.append(tokens[sentiment_index])
 
         random.seed(seed)
         random.shuffle(raw_data)
