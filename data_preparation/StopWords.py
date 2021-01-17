@@ -1,9 +1,11 @@
 from nltk.corpus import stopwords
-from typing import List
-from loading.LoadingUtils import RawData
+from typing import Dict, Union, List
+
+RawData = Dict[str, Dict[str, Union[Dict[str, List[str]], List[str]]]]
 
 stopWords = list(stopwords.words('english'))
-stopWords.extend([".", ",", "!", "(", ")"])
+stopWords.extend([".", ",", "!", "(", ")", '"', "-", "'", ":", ";", "?", "=", "<", ">", "https", "div", "&", "/", "*",
+                  "[", "]"])
 
 
 def short_array(original: List[str], indexes: List[int]) -> List[str]:
