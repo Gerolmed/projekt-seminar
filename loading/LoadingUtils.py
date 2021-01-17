@@ -7,7 +7,7 @@ from utils.Data import Data, BasicData
 Tokens = List[str]
 Review = Dict[str, Union[Dict[str, List[str]], Tokens]]
 LoadedData = Dict[str, Review]
-
+RawData = Dict[str, Dict[str, Union[Dict[str, List[str]], List[str]]]]
 seed: int = 1234567890
 
 
@@ -17,7 +17,7 @@ class LoadingUtils:
 
         extraction_of = 'sentiments'
 
-        rawData = LoadingUtils.__open_file(filename)
+        rawData: RawData = LoadingUtils.__open_file(filename)
 
         # possible preprocessing: lowercasing of tokens
         for i, (k, v) in enumerate(rawData.items()):
@@ -26,7 +26,7 @@ class LoadingUtils:
             rawData[k]['tokens'] = tokens
 
         # remove Stopwords
-        rawData = removeStopWords(rawData)
+        rawData: RawData = removeStopWords(rawData)
 
         keys = list(rawData.keys())
         random.seed(seed)

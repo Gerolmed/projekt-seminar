@@ -1,6 +1,6 @@
 from nltk.corpus import stopwords
 from typing import List
-
+from loading.LoadingUtils import RawData
 
 stopWords = list(stopwords.words('english'))
 stopWords.extend([".", ",", "!", "(", ")"])
@@ -15,7 +15,7 @@ def short_array(original: List[str], indexes: List[int]) -> List[str]:
     return new_list
 
 
-def removeStopWords(data):
+def removeStopWords(data: RawData):
     """Removes Stopwords from given data"""
     for i, (k, v) in enumerate(data.items()):
         remove_index = list()
