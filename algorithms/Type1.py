@@ -1,5 +1,3 @@
-
-
 from utils.Algorithm import Algorithm
 from utils.Data import BasicData
 from utils.Result import Result

@@ -1,5 +1,4 @@
 from nltk.corpus import stopwords
-from utils.Data import Data
 from typing import List
 
 

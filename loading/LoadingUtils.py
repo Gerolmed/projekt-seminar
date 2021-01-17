@@ -25,6 +25,7 @@ class LoadingUtils:
             tokens = [token.lower() for token in tokens]
             rawData[k]['tokens'] = tokens
 
+        # remove Stopwords
         rawData = removeStopWords(rawData)
 
         keys = list(rawData.keys())
