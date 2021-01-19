@@ -33,3 +33,12 @@ class TfidfVectorizerData(Data):
         self.train_labels = train_labels
         self.test_data = test_data
         self.test_labels = test_labels
+
+class PosData(Data):
+    def __init__(self, train_data: List[Dict[str, bool]], train_labels: List[str], test_data: List[Dict[str, bool]],
+                 test_labels: List[str]):
+        super().__init__("pos_data")
+        self.train_data = train_data
+        self.train_labels = train_labels
+        self.test_data = test_data
+        self.test_labels = test_labels

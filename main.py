@@ -1,8 +1,10 @@
 from typing import List, Dict
 
+from algorithms.CustomPos import CustomPos
 from algorithms.NaiveBayes import NaiveBayes
 from algorithms.Type1 import Type1
 from data_preparation.GloVe import GloVe
+from data_preparation.PosPreparation import PosPreparation
 from data_preparation.TfidfVectorizerProvider import TfidfVectorizerProvider
 from loading.LoadingUtils import LoadingUtils
 from utils.Algorithm import Algorithm
@@ -11,8 +13,8 @@ from utils.DataProvider import DataProvider
 from utils.Result import Result
 
 
-algorithms: List[Algorithm] = [Type1(), NaiveBayes()]
-data_providers: List[DataProvider] = [TfidfVectorizerProvider(), GloVe()]
+algorithms: List[Algorithm] = [Type1(), NaiveBayes(), CustomPos()]
+data_providers: List[DataProvider] = [TfidfVectorizerProvider(), GloVe(), PosPreparation()]
 
 
 [basicData, rawData] = LoadingUtils.read_data(filename=r'./data_laptop_absa.json')

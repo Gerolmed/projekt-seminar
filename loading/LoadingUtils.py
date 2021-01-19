@@ -49,7 +49,7 @@ class LoadingUtils:
         test_labels_uncertainty = list()
         for k in keys_test:
             curr_users = [s for s in rawData[k].keys() if s != 'tokens']
-            # for illlustration only the annotation of one user is used here -> curr_users[0]
+            # for illustration only the annotation of one user is used here -> curr_users[0]
             test_labels.append(rawData[k][curr_users[0]][extraction_of])
             test_labels_uncertainty.append(rawData[k][curr_users[0]][extraction_of + '_uncertainty'])
 
