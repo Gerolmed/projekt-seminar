@@ -13,7 +13,7 @@ from utils.DataProvider import DataProvider
 from utils.Result import Result
 
 
-algorithms: List[Algorithm] = [Type1(), NaiveBayes(), CustomPos()]
+algorithms: List[Algorithm] = [CustomPos()]
 data_providers: List[DataProvider] = [TfidfVectorizerProvider(), GloVe(), PosPreparation()]
 
 

@@ -15,14 +15,14 @@ class NaiveBayes(Algorithm):
 
     def execute(self, data: TfidfVectorizerData) -> Result:
 
-        model = MultinomialNB()
+        model = MultinomialNB(alpha=0.01)
         model.fit(data.train_data, data.train_labels)
 
         labels_predicted = model.predict(data.test_data)
 
         conf_matrix = confusion_matrix(data.test_labels, labels_predicted)
-        precision = precision_score(data.test_labels, labels_predicted, average="micro")
-        recall = recall_score(data.test_labels, labels_predicted, average="micro")
-        f1 = f1_score(data.test_labels, labels_predicted, average="micro")
+        precision = precision_score(data.test_labels, labels_predicted, average="macro")
+        recall = recall_score(data.test_labels, labels_predicted, average="macro")
+        f1 = f1_score(data.test_labels, labels_predicted, average="macro")
 
         return Result(precision, recall, f1, conf_matrix)

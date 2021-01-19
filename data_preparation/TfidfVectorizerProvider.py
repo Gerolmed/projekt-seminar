@@ -43,6 +43,7 @@ class TfidfVectorizerProvider(DataProvider):
                     raw_data.append(" ".join(tokens))
                     full_labels.append(tokens[sentiment_index])
 
+
         random.seed(seed)
         random.shuffle(raw_data)
 
