@@ -1,8 +1,12 @@
-from utils.Algorithm import Algorithm
-from utils.Data import TfidfVectorizerData
-from utils.Result import Result
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.feature_extraction import DictVectorizer
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
+from sklearn.naive_bayes import MultinomialNB, GaussianNB, CategoricalNB, BernoulliNB
+from sklearn.pipeline import Pipeline
+import pandas as pd
+
+from utils.Algorithm import Algorithm
+from utils.Data import PosData
+from utils.Result import Result
 
 
 class NaiveBayes(Algorithm):
@@ -11,18 +15,22 @@ class NaiveBayes(Algorithm):
         return "Naive Bayes"
 
     def get_supported_data_type(self) -> str:
-        return "tfidf_vectorized"
+        return "pos_data"
 
-    def execute(self, data: TfidfVectorizerData) -> Result:
+    def execute(self, data: PosData) -> Result:
 
-        model = MultinomialNB(alpha=0.01)
-        model.fit(data.train_data, data.train_labels)
+        clf = Pipeline([
+            ('vectorizer', DictVectorizer(sparse=False)),
+            ('classifier', MultinomialNB(alpha=0.01))
+        ])
+        data_array = pd.array(data.train_data, dtype=object)
+        clf.fit(data_array, data.train_labels)
 
-        labels_predicted = model.predict(data.test_data)
+        pred_labels = clf.predict(data.test_data)
 
-        conf_matrix = confusion_matrix(data.test_labels, labels_predicted)
-        precision = precision_score(data.test_labels, labels_predicted, average="macro")
-        recall = recall_score(data.test_labels, labels_predicted, average="macro")
-        f1 = f1_score(data.test_labels, labels_predicted, average="macro")
+        precision = precision_score(data.test_labels, pred_labels, average="macro")
+        recall = recall_score(data.test_labels, pred_labels, average="macro")
+        f1 = f1_score(data.test_labels, pred_labels, average="macro")
+        conf_matrix = confusion_matrix(data.test_labels, pred_labels)
 
         return Result(precision, recall, f1, conf_matrix)

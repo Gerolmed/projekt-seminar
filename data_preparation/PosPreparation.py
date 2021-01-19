@@ -25,7 +25,7 @@ class PosPreparation(DataProvider):
                 for index, token in enumerate(tokens):
                     sentence.append((token, labels[index]))
                 tagged_sentences.append(sentence)
-                break
+
 
         for tagged in tagged_sentences:
             for index in range(len(tagged)):
