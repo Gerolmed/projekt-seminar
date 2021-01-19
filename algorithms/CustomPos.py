@@ -25,10 +25,9 @@ class CustomPos(Algorithm):
         clf.fit(data_array, data.train_labels)
 
         pred_labels = clf.predict(data.test_data)
-
-        precision = precision_score(data.test_labels, pred_labels, average='macro', zero_division=1)
-        recall = recall_score(data.test_labels, pred_labels, average='macro', zero_division=1)
-        f1 = f1_score(data.test_labels, pred_labels, average='macro', zero_division=1)
+        precision = precision_score(data.test_labels, pred_labels, average='macro')
+        recall = recall_score(data.test_labels, pred_labels, average='macro')
+        f1 = f1_score(data.test_labels, pred_labels, average='macro')
         conf_matrix = confusion_matrix(data.test_labels, pred_labels)
 
         return Result(precision, recall, f1, conf_matrix)
