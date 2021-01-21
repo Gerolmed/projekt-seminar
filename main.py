@@ -1,5 +1,5 @@
 from typing import List, Dict
-
+from algorithms.SVM import SupportVectorMachine
 from algorithms.CustomPos import CustomPos
 from algorithms.NaiveBayes import NaiveBayes
 from algorithms.Type1 import Type1
@@ -13,7 +13,7 @@ from utils.DataProvider import DataProvider
 from utils.Result import Result
 
 
-algorithms: List[Algorithm] = [Type1(), NaiveBayes(), CustomPos()]
+algorithms: List[Algorithm] = [SupportVectorMachine()]
 data_providers: List[DataProvider] = [TfidfVectorizerProvider(), GloVe(), PosPreparation()]
 
 
