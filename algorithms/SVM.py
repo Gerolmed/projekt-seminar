@@ -1,7 +1,7 @@
 import pandas as pd
+from sklearn.feature_extraction import DictVectorizer
 from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
 from sklearn.svm import LinearSVC
 
 from utils.Algorithm import Algorithm
@@ -16,14 +16,16 @@ class SupportVectorMachine(Algorithm):
 
     def get_supported_data_type(self) -> str:
         return "pos_data"
-
+    
     def execute(self, data: PosData) -> Result:
 
         clf = Pipeline([
-            ('standardscaler', StandardScaler()),
+            ('vectorizer', DictVectorizer(sparse=False)),
             ('linearsvc', LinearSVC(random_state=0, tol=1e-05))
         ])
+
         data_array = pd.array(data.train_data, dtype=object)
+
         clf.fit(data_array, data.train_labels)
 
         pred_labels = clf.predict(data.test_data)

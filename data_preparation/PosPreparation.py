@@ -26,7 +26,6 @@ class PosPreparation(DataProvider):
                     sentence.append((token, labels[index]))
                 tagged_sentences.append(sentence)
 
-
         for tagged in tagged_sentences:
             for index in range(len(tagged)):
                 x_all.append(features(extract_word(tagged), index))

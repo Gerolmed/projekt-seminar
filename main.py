@@ -13,7 +13,7 @@ from utils.DataProvider import DataProvider
 from utils.Result import Result
 
 
-algorithms: List[Algorithm] = [SupportVectorMachine()]
+algorithms: List[Algorithm] = [SupportVectorMachine(), NaiveBayes()]
 data_providers: List[DataProvider] = [TfidfVectorizerProvider(), GloVe(), PosPreparation()]
 
 

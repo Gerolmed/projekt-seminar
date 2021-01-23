@@ -23,7 +23,9 @@ class NaiveBayes(Algorithm):
             ('vectorizer', DictVectorizer(sparse=False)),
             ('classifier', MultinomialNB(alpha=0.01))
         ])
-        data_array = pd.array(data.train_data, dtype=object)
+
+        data_array = pd.array(data.train_data)
+
         clf.fit(data_array, data.train_labels)
 
         pred_labels = clf.predict(data.test_data)
