@@ -1,6 +1,6 @@
 from typing import List, Dict
 from algorithms.SVM import SupportVectorMachine
-from algorithms.CustomPos import CustomPos
+from algorithms.DecisionTrees import DecisionTrees
 from algorithms.NaiveBayes import NaiveBayes
 from algorithms.Type1 import Type1
 from data_preparation.GloVe import GloVe
@@ -13,7 +13,7 @@ from utils.DataProvider import DataProvider
 from utils.Result import Result
 
 
-algorithms: List[Algorithm] = [SupportVectorMachine(), NaiveBayes()]
+algorithms: List[Algorithm] = [Type1(), SupportVectorMachine(), NaiveBayes(), DecisionTrees()]
 data_providers: List[DataProvider] = [TfidfVectorizerProvider(), GloVe(), PosPreparation()]
 
 

@@ -9,9 +9,9 @@ from sklearn.pipeline import Pipeline
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
 
 
-class CustomPos(Algorithm):
+class DecisionTrees(Algorithm):
     def get_name(self) -> str:
-        return "Custom POS"
+        return "Decision Trees"
 
     def get_supported_data_type(self) -> str:
         return "pos_data"
