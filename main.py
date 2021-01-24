@@ -3,6 +3,7 @@ from algorithms.SVM import SupportVectorMachine
 from algorithms.DecisionTrees import DecisionTrees
 from algorithms.NaiveBayes import NaiveBayes
 from algorithms.Type1 import Type1
+from algorithms.KNN import KNearestNeighbor
 from data_preparation.GloVe import GloVe
 from data_preparation.PosPreparation import PosPreparation
 from data_preparation.TfidfVectorizerProvider import TfidfVectorizerProvider
@@ -13,7 +14,12 @@ from utils.DataProvider import DataProvider
 from utils.Result import Result
 
 
-algorithms: List[Algorithm] = [Type1(), SupportVectorMachine(), NaiveBayes(), DecisionTrees()]
+algorithms: List[Algorithm] = [#Type1(),
+                               #SupportVectorMachine(),
+                               NaiveBayes(),
+                               #DecisionTrees(),
+                               KNearestNeighbor()
+                               ]
 data_providers: List[DataProvider] = [TfidfVectorizerProvider(), GloVe(), PosPreparation()]
 
 
