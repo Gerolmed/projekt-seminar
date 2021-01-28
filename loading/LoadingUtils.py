@@ -44,7 +44,8 @@ class LoadingUtils:
             for review_key, review_data in value.items():
                 if review_key == "tokens":
                     continue
-                rawData[sentence_key][review_data]["sentiments"] = merge_sentiments(value.get("sentiments"), value.get("sentiments_uncertainty"))
+                rawData[sentence_key][review_data]["sentiments"] = \
+                    merge_sentiments(review_data.get("sentiments"), review_data.get("sentiments_uncertainty"))
 
 
         keys = list(rawData.keys())
