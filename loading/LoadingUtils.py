@@ -11,6 +11,18 @@ RawData = Dict[str, Dict[str, Union[Dict[str, List[str]], List[str]]]]
 seed: int = 1234567890
 
 
+def merge_sentiments(sentiments: List[str], sentiments_uncertainty: List[str]):
+    merged: List[str] = []
+
+    for index, sentiment in enumerate(sentiments):
+        if sentiment != "O":
+            merged.append(sentiment)
+        else:
+            merged.append(sentiments_uncertainty[index])
+
+    return merged
+
+
 class LoadingUtils:
     @staticmethod
     def read_data(filename: str) -> [Data, LoadedData]:
@@ -27,6 +39,13 @@ class LoadingUtils:
 
         # remove Stopwords
         rawData: RawData = removeStopWords(rawData)
+
+        for (sentence_key, value) in rawData.items():
+            for review_key, review_data in value.items():
+                if review_key == "tokens":
+                    continue
+                rawData[sentence_key][review_data]["sentiments"] = merge_sentiments(value.get("sentiments"), value.get("sentiments_uncertainty"))
+
 
         keys = list(rawData.keys())
         random.seed(seed)
