@@ -39,7 +39,7 @@ class LoadingUtils:
             rawData[k]['tokens'] = tokens
 
         # remove Stopwords
-        rawData: RawData = removeStopWords(rawData)
+        rawData: RawData = removeStopWords(rawData, test_ids)
 
         for (sentence_key, value) in rawData.items():
             for review_key, review_data in value.items():

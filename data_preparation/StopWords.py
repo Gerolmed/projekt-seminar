@@ -17,9 +17,11 @@ def short_array(original: List[str], indexes: List[int]) -> List[str]:
     return new_list
 
 
-def removeStopWords(data: RawData):
+def removeStopWords(data: RawData, test_data_ids: List[str]):
     """Removes Stopwords from given data"""
     for i, (k, v) in enumerate(data.items()):
+        if k in test_data_ids:
+            continue
         remove_index = list()
         tokens = v.get('tokens')
         for index, token in enumerate(tokens):
