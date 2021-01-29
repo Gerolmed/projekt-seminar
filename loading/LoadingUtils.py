@@ -25,11 +25,12 @@ def merge_sentiments(sentiments: List[str], sentiments_uncertainty: List[str]):
 
 class LoadingUtils:
     @staticmethod
-    def read_data(filename: str) -> [Data, LoadedData]:
+    def read_data(filename: str, testIdsFile: str) -> [Data, LoadedData]:
 
         extraction_of = 'sentiments'
 
         rawData: RawData = LoadingUtils.__open_file(filename)
+        test_ids = LoadingUtils.__open_test_ids(testIdsFile)
 
         # possible preprocessing: lowercasing of tokens
         for i, (k, v) in enumerate(rawData.items()):
@@ -44,16 +45,14 @@ class LoadingUtils:
             for review_key, review_data in value.items():
                 if review_key == "tokens":
                     continue
-                rawData[sentence_key][review_key]["sentiments"] = merge_sentiments(review_data.get("sentiments"), review_data.get("sentiments_uncertainty"))
-
+                rawData[sentence_key][review_key]["sentiments"] = merge_sentiments(review_data.get("sentiments"),
+                                                                                   review_data.get(
+                                                                                       "sentiments_uncertainty"))
 
         keys = list(rawData.keys())
-        random.seed(seed)
-        random.shuffle(keys)  # Shuffle keys
 
-        split_parameter = round(len(keys) * 0.7)
-        keys_train = keys[:split_parameter]
-        keys_test = keys[split_parameter:]
+        keys_train = list(filter(lambda key: key not in test_ids, keys))
+        keys_test = list(filter(lambda key: key in test_ids, keys))
 
         train_tokens = [rawData[k]['tokens'] for k in keys_train]
         train_labels = list()
@@ -82,7 +81,7 @@ class LoadingUtils:
         labelclass_to_id = dict(zip(all_labelclasses, list(range(len(all_labelclasses)))))
 
         n_tags = len(list(labelclass_to_id.keys()))
-        return [BasicData(train_tokens, train_labels, test_tokens, test_labels, n_tags, labelclass_to_id), rawData]
+        return [BasicData(train_tokens, train_labels, test_tokens, test_labels, n_tags, labelclass_to_id), rawData, test_ids]
 
     @staticmethod
     def __open_file(filename: str):
@@ -100,3 +99,12 @@ class LoadingUtils:
                     else:
                         v_new[field] = field_data
         return data_new
+
+    @staticmethod
+    def __open_test_ids(filename: str):
+        ids: List[str] = []
+
+        with open(file=filename, mode='r', encoding='utf8') as infile:
+            data = json.load(infile)
+            ids = list(data.get("test_IDs"))
+        return ids

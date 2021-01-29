@@ -7,7 +7,7 @@ from data_preparation.StopWords import removeStopWords
 
 class GloVe(DataProvider):
 
-    def execute(self, data: Data, rawData: LoadedData) -> Data:
+    def execute(self, data: Data, rawData: LoadedData, test_ids: List[str]) -> Data:
         """Vectorizes the Data via Global Vectorization(GloVe)"""
 
         preparedData = removeStopWords(rawData)

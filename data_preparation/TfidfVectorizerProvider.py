@@ -9,7 +9,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 class TfidfVectorizerProvider(DataProvider):
 
-    def execute(self, data: BasicData, rawData: LoadedData) -> Data:
+    def execute(self, data: BasicData, rawData: LoadedData, test_ids: List[str]) -> Data:
         vocabulary = list()
 
         # Collect vocabulary

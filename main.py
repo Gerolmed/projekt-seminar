@@ -23,14 +23,14 @@ algorithms: List[Algorithm] = [#Type1(),
 data_providers: List[DataProvider] = [TfidfVectorizerProvider(), GloVe(), PosPreparation()]
 
 
-[basicData, rawData] = LoadingUtils.read_data(filename=r'./data_laptop_absa.json')
+[basicData, rawData, test_ids] = LoadingUtils.read_data(filename=r'./data_laptop_absa.json', testIdsFile=r"./test_ids.json")
 
 data_dict: Dict[str, Data] = dict()
 
 data_dict.setdefault(basicData.data_type, basicData)
 
 for data_provider in data_providers:
-    data = data_provider.execute(basicData, rawData)
+    data = data_provider.execute(basicData, rawData, test_ids)
     data_dict.setdefault(data.data_type, data)
 
 results: Dict[str, Result] = dict()

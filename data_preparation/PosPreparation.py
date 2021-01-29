@@ -1,4 +1,3 @@
-import random
 from typing import List, Tuple
 
 from loading.LoadingUtils import LoadedData, seed
@@ -8,12 +7,15 @@ from utils.DataProvider import DataProvider
 
 class PosPreparation(DataProvider):
 
-    def execute(self, data: Data, rawData: LoadedData) -> Data:
+    def execute(self, data: Data, rawData: LoadedData, test_ids: List[str]) -> Data:
 
-        tagged_sentences: List[List[Tuple[str, str]]] = list()
+        tagged_sentences: List[Tuple[str, List[Tuple[str, str]]]] = list()
 
-        x_all = []
-        y_all: List[str] = []
+        x_train = []
+        y_train: List[str] = []
+
+        x_test = []
+        y_test: List[str] = []
 
         for dataKey, dataValue in rawData.items():
             tokens: List[str] = dataValue.get("tokens")
@@ -24,22 +26,19 @@ class PosPreparation(DataProvider):
                 sentence = list()
                 for index, token in enumerate(tokens):
                     sentence.append((token, labels[index]))
-                tagged_sentences.append(sentence)
+                tagged_sentences.append((dataKey, sentence))
 
-        for tagged in tagged_sentences:
+        for group in tagged_sentences:
+            tagged = group[1]
             for index in range(len(tagged)):
-                x_all.append(features(extract_word(tagged), index))
-                y_all.append(tagged[index][1])
+                if group[0] in test_ids:
+                    x_test.append(features(extract_word(tagged), index))
+                    y_test.append(tagged[index][1])
+                else:
+                    x_train.append(features(extract_word(tagged), index))
+                    y_train.append(tagged[index][1])
 
-        random.seed(seed)
-        random.shuffle(x_all)
-
-        random.seed(seed)
-        random.shuffle(y_all)
-
-        split_parameter = round(len(y_all) * 0.7)
-
-        return PosData(x_all[split_parameter:], y_all[split_parameter:], x_all[:split_parameter], y_all[:split_parameter])
+        return PosData(x_train, y_train, x_test, y_test)
 
 
 def features(sentence, index):
