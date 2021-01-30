@@ -5,17 +5,17 @@ import numpy as np
 import pandas as pd
 
 
-class Type2(Algorithm):
-
+class ComparisonClassifier(Algorithm):
+    """Classifier handed out with the project task"""
     def get_name(self) -> str:
-        return "type_2"
+        return "type_1"
 
     def get_supported_data_type(self) -> str:
         return "basic"
 
     def execute(self, data: BasicData) -> Result:
         # start classification
-    # TODO Sebi: Type 1 mit relativer statt absoluter Häufigkeit implementieren
+
         # train classifier -> generate word lists per labelclass
         # count frequencies of labelclasses per term
         term_to_labelclass_to_freq = dict()

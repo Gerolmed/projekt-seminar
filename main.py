@@ -1,13 +1,7 @@
-from datetime import time
 from typing import List, Dict
-from algorithms.SVM import SupportVectorMachine
-from algorithms.DecisionTrees import DecisionTrees
 from algorithms.NaiveBayes import NaiveBayes
-from algorithms.Type1 import Type1
 from algorithms.KNN import KNearestNeighbor
-from data_preparation.GloVe import GloVe
 from data_preparation.PosPreparation import PosPreparation
-from data_preparation.TfidfVectorizerProvider import TfidfVectorizerProvider
 from loading.LoadingUtils import LoadingUtils
 from utils.Algorithm import Algorithm
 from utils.Data import Data
@@ -16,13 +10,11 @@ from utils.Result import Result
 from utils.Vectorizer import Vectorizer
 from vectorizer.PosDataDictVectorizer import PosDataDictVectorizer
 
-algorithms: List[Algorithm] = [  # Type1(),
-    # SupportVectorMachine(),
+algorithms: List[Algorithm] = [
     NaiveBayes(),
-    # DecisionTrees(),
     KNearestNeighbor()
 ]
-data_providers: List[DataProvider] = [TfidfVectorizerProvider(), GloVe(), PosPreparation()]
+data_providers: List[DataProvider] = [PosPreparation()]
 vectorizers: List[Vectorizer] = [PosDataDictVectorizer()]
 
 

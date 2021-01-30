@@ -1,7 +1,6 @@
-import random
 from typing import Dict, Union, List
 import json
-from data_preparation.StopWords import removeStopWords
+from loading.StopWords import removeStopWords
 from utils.Data import Data, BasicData
 
 Tokens = List[str]
