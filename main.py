@@ -4,6 +4,7 @@ from algorithms.DecisionTrees import DecisionTrees
 from algorithms.NaiveBayes import MultinomialNaiveBayes
 from algorithms.KNN import KNearestNeighbor
 from algorithms.SVM import SupportVectorMachine
+from data_preparation.ComparisonDataPreparation import ComparisonDataPreparation
 from data_preparation.PosPreparation import PosPreparation
 from loading.LoadingUtils import LoadingUtils
 from utils.Algorithm import Algorithm
@@ -13,29 +14,33 @@ from utils.Result import Result
 from utils.Vectorizer import Vectorizer
 from vectorizer.PosDataDictVectorizer import PosDataDictVectorizer
 
+data_providers: List[DataProvider] = [
+    ComparisonDataPreparation(),
+    PosPreparation()
+]
+"""Prepares data for vectorizer (or directly for algorithm)"""
+
+vectorizers: List[Vectorizer] = [
+    PosDataDictVectorizer()
+]
+"""The vectorizers to add vectorized data based on prepared data"""
+
 algorithms: List[Algorithm] = [
     MultinomialNaiveBayes(),
     # SupportVectorMachine(),
     # DecisionTrees(),
     # KNearestNeighbor(),
 ]
-data_providers: List[DataProvider] = [PosPreparation()]
-vectorizers: List[Vectorizer] = [PosDataDictVectorizer()]
+"""The Algorithms to use"""
 
-
-data_dict: Dict[str, Data]= dict()
+data_dict: Dict[str, Data] = dict()
 """Dictionary to store different data types by id"""
 
 # Load raw and basic data
-[basicData, rawData, test_ids] = LoadingUtils.read_data(filename=r'./data_laptop_absa.json',
-                                                        testIdsFile=r"./test_ids.json")
-
-
-data_dict.setdefault(basicData.data_type, basicData)
-
+[rawData, test_ids] = LoadingUtils.read_data(filename=r'./data_laptop_absa.json', testIdsFile=r"./test_ids.json")
 # Create different base data formats
 for data_provider in data_providers:
-    data = data_provider.execute(basicData, rawData, test_ids)
+    data = data_provider.execute(rawData, test_ids)
     data_dict.setdefault(data.data_type, data)
 
 # Vectorize data and add it to data list
@@ -58,6 +63,7 @@ for algorithm in algorithms:
 
         results.append(result)
 
+# Prints all results in a fixed format after execution
 for result in results:
     print("============================================")
     print(f"Name: {result.algorithm_name}")

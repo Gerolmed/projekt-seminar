@@ -26,61 +26,27 @@ class LoadingUtils:
     @staticmethod
     def read_data(filename: str, testIdsFile: str) -> [Data, LoadedData]:
 
-        extraction_of = 'sentiments'
-
-        rawData: RawData = LoadingUtils.__open_file(filename)
+        raw_data: RawData = LoadingUtils.__open_file(filename)
         test_ids = LoadingUtils.__open_test_ids(testIdsFile)
 
         # lowercasing of tokens
-        for i, (k, v) in enumerate(rawData.items()):
+        for i, (k, v) in enumerate(raw_data.items()):
             tokens = v.get('tokens')
             tokens = [token.lower() for token in tokens]
-            rawData[k]['tokens'] = tokens
+            raw_data[k]['tokens'] = tokens
 
         # remove Stopwords
-        rawData: RawData = removeStopWords(rawData, test_ids)
+        raw_data: RawData = removeStopWords(raw_data, test_ids)
 
-        for (sentence_key, value) in rawData.items():
+        # currently just merge uncertain in sentiments
+        for (sentence_key, value) in raw_data.items():
             for review_key, review_data in value.items():
                 if review_key == "tokens":
                     continue
-                rawData[sentence_key][review_key]["sentiments"] = merge_sentiments(review_data.get("sentiments"),
-                                                                                   review_data.get(
-                                                                                       "sentiments_uncertainty"))
-
-        keys = list(rawData.keys())
-
-        keys_train = list(filter(lambda key: key not in test_ids, keys))
-        keys_test = list(filter(lambda key: key in test_ids, keys))
-
-        train_tokens = [rawData[k]['tokens'] for k in keys_train]
-        train_labels = list()
-        train_labels_uncertainty = list()
-        for k in keys_train:
-            curr_users = [s for s in rawData[k].keys() if s != 'tokens']
-            # for illlustration only the annotation of one user is used here -> curr_users[0]
-            train_labels.append(rawData[k][curr_users[0]][extraction_of])
-            train_labels_uncertainty.append(rawData[k][curr_users[0]][extraction_of + '_uncertainty'])
-        test_tokens = [rawData[k]['tokens'] for k in keys_test]
-        test_labels = list()
-        test_labels_uncertainty = list()
-        for k in keys_test:
-            curr_users = [s for s in rawData[k].keys() if s != 'tokens']
-            # for illustration only the annotation of one user is used here -> curr_users[0]
-            test_labels.append(rawData[k][curr_users[0]][extraction_of])
-            test_labels_uncertainty.append(rawData[k][curr_users[0]][extraction_of + '_uncertainty'])
-
-        all_labelclasses = set()
-        for ds in [train_labels, test_labels]:
-            for row in ds:
-                all_labelclasses.update(row)
-        all_labelclasses = list(all_labelclasses)
-        all_labelclasses.sort()
-
-        labelclass_to_id = dict(zip(all_labelclasses, list(range(len(all_labelclasses)))))
-
-        n_tags = len(list(labelclass_to_id.keys()))
-        return [BasicData(train_tokens, train_labels, test_tokens, test_labels, n_tags, labelclass_to_id), rawData, test_ids]
+                raw_data[sentence_key][review_key]["sentiments"] = merge_sentiments(review_data.get("sentiments"),
+                                                                                    review_data.get(
+                                                                                        "sentiments_uncertainty"))
+        return [raw_data, test_ids]
 
     @staticmethod
     def __open_file(filename: str):

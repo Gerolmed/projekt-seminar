@@ -1,13 +1,13 @@
 from typing import List, Tuple
 
-from loading.LoadingUtils import LoadedData, seed
+from loading.LoadingUtils import LoadedData
 from utils.Data import Data, PosData
 from utils.DataProvider import DataProvider
 
 
 class PosPreparation(DataProvider):
 
-    def execute(self, data: Data, rawData: LoadedData, test_ids: List[str]) -> Data:
+    def execute(self, rawData: LoadedData, test_ids: List[str]) -> Data:
 
         tagged_sentences: List[Tuple[str, List[Tuple[str, str]]]] = list()
 
