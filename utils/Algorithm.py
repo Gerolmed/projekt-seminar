@@ -1,3 +1,5 @@
+from typing import List
+
 from utils.Data import Data
 from utils.Result import Result
 
@@ -14,7 +16,7 @@ class Algorithm:
         raise Exception("Not implemented")
         pass
 
-    def get_supported_data_type(self) -> str:
+    def get_supported_data_types(self) -> List[str]:
         """Returns the name of the given method"""
         raise Exception("Not implemented")
         pass

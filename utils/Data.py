@@ -1,4 +1,4 @@
-from typing import List, Union, Dict
+from typing import List, Union, Dict, Any
 
 TrainTokens = List[Union[Dict[str, List[str]], List[str]]]
 TrainLabels = List[List[str]]
@@ -39,6 +39,16 @@ class PosData(Data):
     def __init__(self, train_data: List[Dict[str, bool]], train_labels: List[str], test_data: List[Dict[str, bool]],
                  test_labels: List[str]):
         super().__init__("pos_data")
+        self.train_data = train_data
+        self.train_labels = train_labels
+        self.test_data = test_data
+        self.test_labels = test_labels
+
+
+class DictVecPosData(Data):
+    def __init__(self, train_data: List[Dict[str, Any]], train_labels: List[str], test_data: List[Dict[str, Any]],
+                 test_labels: List[str]):
+        super().__init__("dict_vec_pos_data")
         self.train_data = train_data
         self.train_labels = train_labels
         self.test_data = test_data
