@@ -53,3 +53,24 @@ class DictVecPosData(Data):
         self.train_labels = train_labels
         self.test_data = test_data
         self.test_labels = test_labels
+
+
+class CountVecInputData(Data):
+    def __init__(self, train_data: List[str], train_labels: List[str], test_data: List[str],
+                 test_labels: List[str], vocabulary: Dict[str, int]):
+        super().__init__("count_vec_input_data")
+        self.train_data = train_data
+        self.train_labels = train_labels
+        self.test_data = test_data
+        self.test_labels = test_labels
+        self.vocabulary = vocabulary
+
+
+class CountVecData(Data):
+    def __init__(self, train_data: List[Dict[str, Any]], train_labels: List[str], test_data: List[Dict[str, Any]],
+                 test_labels: List[str]):
+        super().__init__("count_vec_data")
+        self.train_data = train_data
+        self.train_labels = train_labels
+        self.test_data = test_data
+        self.test_labels = test_labels

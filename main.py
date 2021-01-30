@@ -12,6 +12,7 @@ from utils.Data import Data
 from utils.DataProvider import DataProvider
 from utils.Result import Result
 from utils.Vectorizer import Vectorizer
+from vectorizer.CountVectorizer import CountVec
 from vectorizer.PosDataDictVectorizer import PosDataDictVectorizer
 
 data_providers: List[DataProvider] = [
@@ -21,7 +22,8 @@ data_providers: List[DataProvider] = [
 """Prepares data for vectorizer (or directly for algorithm)"""
 
 vectorizers: List[Vectorizer] = [
-    PosDataDictVectorizer()
+    PosDataDictVectorizer(),
+    CountVec()
 ]
 """The vectorizers to add vectorized data based on prepared data"""
 
