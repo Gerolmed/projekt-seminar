@@ -25,6 +25,7 @@ vectorizers: List[Vectorizer] = [
 ]
 """The vectorizers to add vectorized data based on prepared data"""
 
+
 algorithms: List[Algorithm] = [
     MultinomialNaiveBayes(),
     # SupportVectorMachine(),
@@ -69,8 +70,8 @@ for result in results:
     print(f"Name: {result.algorithm_name}")
     print(f"Data: {result.data_name}")
     print("")
-    print(f"Train Time: {result.train_time}")
-    print(f"Test Time: {result.test_time}")
+    print(f"Train Time: {result.train_time} sec")
+    print(f"Test Time: {result.test_time} sec")
     print("")
     print(f"Precision: {result.precision}")
     print(f"Recall: {result.recall}")
