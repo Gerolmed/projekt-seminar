@@ -1,3 +1,6 @@
+from typing import List
+import time
+
 from utils.Algorithm import Algorithm
 from utils.Data import BasicData
 from utils.Result import Result
@@ -10,12 +13,12 @@ class ComparisonClassifier(Algorithm):
     def get_name(self) -> str:
         return "type_1"
 
-    def get_supported_data_type(self) -> str:
-        return "basic"
+    def get_supported_data_types(self) -> List[str]:
+        return ["basic"]
 
     def execute(self, data: BasicData) -> Result:
         # start classification
-
+        t0 = time.time()
         # train classifier -> generate word lists per labelclass
         # count frequencies of labelclasses per term
         term_to_labelclass_to_freq = dict()
@@ -34,10 +37,13 @@ class ComparisonClassifier(Algorithm):
             most_freq_labelclass = list(labelclass_to_freq.keys())[index_argmax]
             term_to_most_freq_labelclass[term] = most_freq_labelclass
 
+        train_time = time.time() - t0
         # -> term_to_most_freq_labelclass is the "mapping" which is used as classifier in this simple exammple
         # train phase is over
 
         ## evaluation (test classifier)
+        t0 = time.time()
+
         # predict labels of test data (important: use only data.test_tokens, and do not use data.test_labels at all!!)
         data.test_labels_pred = list()
         for tokens in data.test_tokens:
@@ -49,6 +55,8 @@ class ComparisonClassifier(Algorithm):
                 else:
                     labels_pred.append('O')
             data.test_labels_pred.append(labels_pred)
+        test_time = time.time() - t0
+
         # compute confusion matrix
         conf_matrix = np.zeros((data.n_tags, data.n_tags))
         for i, tokens in enumerate(data.test_tokens):
@@ -70,4 +78,4 @@ class ComparisonClassifier(Algorithm):
         precision = np.mean(precision_per_class)
         recall = np.mean(recall_per_class)
         f1 = 2 * (precision * recall) / (precision + recall)
-        return Result(precision, recall, f1, conf_matrix)
+        return Result(precision, recall, f1, conf_matrix, self.get_name(), data.data_type, train_time, test_time)
