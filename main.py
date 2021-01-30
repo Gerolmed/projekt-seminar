@@ -15,9 +15,9 @@ from vectorizer.PosDataDictVectorizer import PosDataDictVectorizer
 
 algorithms: List[Algorithm] = [
     MultinomialNaiveBayes(),
-    SupportVectorMachine(),
-    DecisionTrees(),
-    #KNearestNeighbor(),
+    # SupportVectorMachine(),
+    # DecisionTrees(),
+    # KNearestNeighbor(),
 ]
 data_providers: List[DataProvider] = [PosPreparation()]
 vectorizers: List[Vectorizer] = [PosDataDictVectorizer()]
@@ -53,22 +53,23 @@ for algorithm in algorithms:
         selected_data = data_dict.get(data_type)
         print(f"Executing {algorithm.get_name()} with {selected_data.data_type}...")
         result = algorithm.execute(selected_data)
-        print(f"Finished executing {algorithm.get_name()} in {str(result.train_time + result.test_time)} sec "
-              f"({str((result.train_time + result.test_time)/60)} min)!")
+        print(f"Finished executing {algorithm.get_name()} in {round((result.train_time + result.test_time), 3)} "
+              f"sec ({round((result.train_time + result.test_time)/60, 3)} min)!")
 
         results.append(result)
 
 for result in results:
     print("============================================")
-    print("Name: " + str(result.algorithm_name))
-    print("Data: " + str(result.data_name))
+    print(f"Name: {result.algorithm_name}")
+    print(f"Data: {result.data_name}")
     print("")
-    print("Train Time: " + str(result.train_time))
-    print("Test Time: " + str(result.test_time))
+    print(f"Train Time: {result.train_time}")
+    print(f"Test Time: {result.test_time}")
     print("")
-    print("Precision: " + str(result.precision))
-    print("Recall: " + str(result.recall))
-    print("F1-measure: " + str(result.f1))
-    print(f'\n{result.confusion_matrix}\n')
+    print(f"Precision: {result.precision}")
+    print(f"Recall: {result.recall}")
+    print(f"F1-measure: {result.f1}")
+    print("")
+    print(f"Confusion Matrix\n{result.confusion_matrix}")
     print("============================================")
     print("")
