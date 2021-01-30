@@ -33,7 +33,7 @@ class BaseAlgorithm(Algorithm):
         f1 = f1_score(data.test_labels, pred_labels, average="macro")
         conf_matrix = confusion_matrix(data.test_labels, pred_labels)
 
-        return Result(precision, recall, f1, conf_matrix, self.get_name(), data.data_type, train_delta, test_delta)
+        return Result(precision, recall, f1, conf_matrix, self.get_name(), data.data_type, round(train_delta, 3), round(test_delta, 3))
 
     @delta
     def train(self, classifier, X: List, Y: List[str]):

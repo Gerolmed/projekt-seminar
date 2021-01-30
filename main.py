@@ -1,6 +1,9 @@
 from typing import List, Dict
+
+from algorithms.DecisionTrees import DecisionTrees
 from algorithms.NaiveBayes import MultinomialNaiveBayes
 from algorithms.KNN import KNearestNeighbor
+from algorithms.SVM import SupportVectorMachine
 from data_preparation.PosPreparation import PosPreparation
 from loading.LoadingUtils import LoadingUtils
 from utils.Algorithm import Algorithm
@@ -12,7 +15,9 @@ from vectorizer.PosDataDictVectorizer import PosDataDictVectorizer
 
 algorithms: List[Algorithm] = [
     MultinomialNaiveBayes(),
-    KNearestNeighbor()
+    SupportVectorMachine(),
+    DecisionTrees(),
+    #KNearestNeighbor(),
 ]
 data_providers: List[DataProvider] = [PosPreparation()]
 vectorizers: List[Vectorizer] = [PosDataDictVectorizer()]
@@ -46,10 +51,10 @@ results: List[Result] = []
 for algorithm in algorithms:
     for data_type in algorithm.get_supported_data_types():
         selected_data = data_dict.get(data_type)
-        print("Executing " + algorithm.get_name() + " with " + selected_data.data_type + "...")
+        print(f"Executing {algorithm.get_name()} with {selected_data.data_type}...")
         result = algorithm.execute(selected_data)
-        print("Finished executing " + algorithm.get_name() + " in " + str(result.train_time + result.test_time) +
-              " seconds!")
+        print(f"Finished executing {algorithm.get_name()} in {str(result.train_time + result.test_time)} sec "
+              f"({str((result.train_time + result.test_time)/60)} min)!")
 
         results.append(result)
 
