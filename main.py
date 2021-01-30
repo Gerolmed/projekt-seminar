@@ -1,5 +1,5 @@
 from typing import List, Dict
-from algorithms.NaiveBayes import NaiveBayes
+from algorithms.NaiveBayes import MultinomialNaiveBayes
 from algorithms.KNN import KNearestNeighbor
 from data_preparation.PosPreparation import PosPreparation
 from loading.LoadingUtils import LoadingUtils
@@ -11,7 +11,7 @@ from utils.Vectorizer import Vectorizer
 from vectorizer.PosDataDictVectorizer import PosDataDictVectorizer
 
 algorithms: List[Algorithm] = [
-    NaiveBayes(),
+    MultinomialNaiveBayes(),
     KNearestNeighbor()
 ]
 data_providers: List[DataProvider] = [PosPreparation()]

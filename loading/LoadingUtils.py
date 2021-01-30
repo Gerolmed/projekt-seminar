@@ -31,7 +31,7 @@ class LoadingUtils:
         rawData: RawData = LoadingUtils.__open_file(filename)
         test_ids = LoadingUtils.__open_test_ids(testIdsFile)
 
-        # possible preprocessing: lowercasing of tokens
+        # lowercasing of tokens
         for i, (k, v) in enumerate(rawData.items()):
             tokens = v.get('tokens')
             tokens = [token.lower() for token in tokens]

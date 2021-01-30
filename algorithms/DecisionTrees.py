@@ -1,33 +1,11 @@
-import pandas as pd
-
-from utils.Algorithm import Algorithm
-from utils.Data import PosData
-from utils.Result import Result
+from algorithms.BaseAlgorithm import BaseAlgorithm
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.feature_extraction import DictVectorizer
-from sklearn.pipeline import Pipeline
-from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
 
 
-class DecisionTrees(Algorithm):
-    def get_name(self) -> str:
-        return "Decision Trees"
+class DecisionTrees(BaseAlgorithm):
 
-    def get_supported_data_type(self) -> str:
-        return "pos_data"
+    def __init__(self):
+        super().__init__("Decision Trees", ["dict_vec_pos_data"])
 
-    def execute(self, data: PosData) -> Result:
-        clf = Pipeline([
-            ('vectorizer', DictVectorizer(sparse=False)),
-            ('classifier', DecisionTreeClassifier(criterion='entropy'))
-        ])
-        data_array = pd.array(data.train_data, dtype=object)
-        clf.fit(data_array, data.train_labels)
-
-        pred_labels = clf.predict(data.test_data)
-        precision = precision_score(data.test_labels, pred_labels, average='macro')
-        recall = recall_score(data.test_labels, pred_labels, average='macro')
-        f1 = f1_score(data.test_labels, pred_labels, average='macro')
-        conf_matrix = confusion_matrix(data.test_labels, pred_labels)
-
-        return Result(precision, recall, f1, conf_matrix)
+    def construct_classifier(self):
+        return DecisionTreeClassifier(criterion='entropy')
