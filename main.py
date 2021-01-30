@@ -56,7 +56,8 @@ for algorithm in algorithms:
         selected_data = data_dict.get(data_type)
         print("Executing " + algorithm.get_name() + " with " + selected_data.data_type + "...")
         result = algorithm.execute(selected_data)
-        print("Finished executing " + algorithm.get_name() + "!")
+        print("Finished executing " + algorithm.get_name() + " in " + str(result.train_time + result.test_time) +
+              " seconds!")
 
         results.append(result)
 
@@ -64,6 +65,9 @@ for result in results:
     print("============================================")
     print("Name: " + str(result.algorithm_name))
     print("Data: " + str(result.data_name))
+    print("")
+    print("Train Time: " + str(result.train_time))
+    print("Test Time: " + str(result.test_time))
     print("")
     print("Precision: " + str(result.precision))
     print("Recall: " + str(result.recall))

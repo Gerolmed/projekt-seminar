@@ -9,10 +9,9 @@ from utils.Result import Result
 
 
 class BaseAlgorithm(Algorithm):
-    def __init__(self, name: str, supported_types: List[str], is_blacklist: bool = False):
+    def __init__(self, name: str, supported_types: List[str]):
         self.name = name
         self.supported_types = supported_types
-        self.is_blacklist = is_blacklist
 
     def get_name(self) -> str:
         return self.name
