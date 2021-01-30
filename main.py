@@ -5,6 +5,7 @@ from algorithms.NaiveBayes import MultinomialNaiveBayes
 from algorithms.KNN import KNearestNeighbor
 from algorithms.SVM import SupportVectorMachine
 from data_preparation.ComparisonDataPreparation import ComparisonDataPreparation
+from data_preparation.CountVecDataPreparation import CountVecDataPreparation
 from data_preparation.PosPreparation import PosPreparation
 from loading.LoadingUtils import LoadingUtils
 from utils.Algorithm import Algorithm
@@ -17,7 +18,8 @@ from vectorizer.PosDataDictVectorizer import PosDataDictVectorizer
 
 data_providers: List[DataProvider] = [
     ComparisonDataPreparation(),
-    PosPreparation()
+    PosPreparation(),
+    CountVecDataPreparation(),
 ]
 """Prepares data for vectorizer (or directly for algorithm)"""
 

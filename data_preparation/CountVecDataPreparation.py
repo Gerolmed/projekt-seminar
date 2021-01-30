@@ -1,7 +1,6 @@
-from random import random
 from typing import List, Dict
 
-from loading.LoadingUtils import LoadedData, seed
+from loading.LoadingUtils import LoadedData
 from utils.Data import Data, CountVecInputData
 from utils.DataProvider import DataProvider
 
@@ -16,8 +15,7 @@ class CountVecDataPreparation(DataProvider):
             vocabulary[token] = 1
         return vocabulary
 
-    def execute(self, data: Data, rawData: LoadedData) -> CountVecInputData:
-
+    def execute(self, rawData: LoadedData, test_ids: List[str]) -> CountVecInputData:
         split_parameter = round(len(rawData) * 0.7)
         all_tokens = []
         all_labels = []
@@ -34,7 +32,7 @@ class CountVecDataPreparation(DataProvider):
 
         vocabulary: Dict[str, int] = {}
 
-        for dataKey, dataValue in rawData[split_parameter:]:
+        for dataKey, dataValue in all_tokens[split_parameter:]:
             tokens: List[str] = dataValue.get("tokens")
             for reviewKey, dataData in dataValue.items():
                 if reviewKey == "tokens":
