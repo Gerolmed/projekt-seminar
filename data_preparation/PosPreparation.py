@@ -31,17 +31,21 @@ class PosPreparation(DataProvider):
         for group in tagged_sentences:
             tagged = group[1]
             for index in range(len(tagged)):
+
+                features = extract_features(extract_word(tagged), index)
+                label = tagged[index][1]
+
                 if group[0] in test_ids:
-                    x_test.append(features(extract_word(tagged), index))
-                    y_test.append(tagged[index][1])
+                    x_test.append(features)
+                    y_test.append(label)
                 else:
-                    x_train.append(features(extract_word(tagged), index))
-                    y_train.append(tagged[index][1])
+                    x_train.append(features)
+                    y_train.append(label)
 
         return PosData(x_train, y_train, x_test, y_test)
 
 
-def features(sentence, index):
+def extract_features(sentence, index):
     """ sentence: [w1, w2, ...], index: the index of the word """
     return {
         'word': sentence[index],
