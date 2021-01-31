@@ -1,14 +1,18 @@
+import copy
+import math
+from collections import Counter
 from typing import List, Dict, Tuple
+
+from scipy.sparse import csr_matrix
+from sklearn.preprocessing import normalize
 
 from loading.LoadingUtils import LoadedData
 from utils.Data import CountVecInputData
 from utils.DataProvider import DataProvider
-import copy
 
 
 class CountVecDataPreparation(DataProvider):
-    # TODO change TestData to TestIDs
-    def execute(self, rawData: LoadedData, test_ids: List[str]) -> CountVecInputData:
+    def execute(self, rawData: LoadedData, test_ids: List[str]) -> TfIdfVecInputData:
 
         rawData = copy.deepcopy(rawData)
 
@@ -59,6 +63,23 @@ class CountVecDataPreparation(DataProvider):
         for index, key in enumerate(sorted_vocabulary):
             index_vocabulary[key] = index
 
-        print(y_train)
-
         return CountVecInputData(x_train, y_train, x_test, y_test, index_vocabulary)
+
+
+def transform(dataset, vocab):
+    row = []
+    col = []
+    values = []
+    for ibx, document in enumerate(dataset):
+        word_freq = dict(Counter(document.split()))
+        for word, freq in word_freq.items():
+            col_index = vocab.get(word, -1)
+            if col_index != -1:
+                if len(word) < 2:
+                    continue
+                col.append(col_index)
+                row.append(ibx)
+                td = freq / float(len(document))  # the number of times a word occured in a document
+                idf_ = 1 + math.log((1 + len(dataset)) / float(1 + idf(word)))
+                values.append((td) * (idf_))
+        return normalize(csr_matrix(((values), (row, col)), shape=(len(dataset), len(vocab))), norm='l2')

@@ -1,3 +1,4 @@
+import copy
 from typing import List, Tuple
 
 from loading.LoadingUtils import LoadedData
@@ -8,7 +9,7 @@ from utils.DataProvider import DataProvider
 class PosPreparation(DataProvider):
 
     def execute(self, rawData: LoadedData, test_ids: List[str]) -> Data:
-
+        rawData = copy.deepcopy(rawData)
         tagged_sentences: List[Tuple[str, List[Tuple[str, str]]]] = list()
 
         x_train = []

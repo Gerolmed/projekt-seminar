@@ -10,7 +10,7 @@ class CountVec(Vectorizer):
         super().__init__("count_vec_input_data")
 
     def vectorize(self, data: CountVecInputData) -> CountVecData:
-        vectorizer = CountVectorizer(vocabulary=data.vocabulary)
+        vectorizer = CountVectorizer(analyzer='word', vocabulary=data.vocabulary)
         x_train = vectorizer.fit_transform(data.train_data)
         x_test = vectorizer.transform(data.test_data)
 

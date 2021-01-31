@@ -25,7 +25,7 @@ data_providers: List[DataProvider] = [
 """Prepares data for vectorizer (or directly for algorithm)"""
 
 vectorizers: List[Vectorizer] = [
-    #PosDataDictVectorizer(),
+    PosDataDictVectorizer(),
     CountVec(),
     TfIdfVec()
 
@@ -35,7 +35,7 @@ vectorizers: List[Vectorizer] = [
 
 
 algorithms: List[Algorithm] = [
-    MultinomialNaiveBayes(),
+    # MultinomialNaiveBayes(),
     SupportVectorMachine(),
     # DecisionTrees(),
     # KNearestNeighbor(),
