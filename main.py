@@ -19,13 +19,13 @@ from vectorizer.PosDataDictVectorizer import PosDataDictVectorizer
 data_providers: List[DataProvider] = [
     ComparisonDataPreparation(),
     PosPreparation(),
-    # CountVecDataPreparation(),
+    CountVecDataPreparation(),
 ]
 """Prepares data for vectorizer (or directly for algorithm)"""
 
 vectorizers: List[Vectorizer] = [
     PosDataDictVectorizer(),
-    # CountVec()
+    CountVec()
 ]
 """The vectorizers to add vectorized data based on prepared data"""
 
