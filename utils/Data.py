@@ -74,3 +74,13 @@ class CountVecData(Data):
         self.train_labels = train_labels
         self.test_data = test_data
         self.test_labels = test_labels
+
+
+class TfIdfVecData(Data):
+    def __init__(self, train_data: List[Dict[str, Any]], train_labels: List[str], test_data: List[Dict[str, Any]],
+                 test_labels: List[str]):
+        super().__init__("tfidf_vec_data")
+        self.train_data = train_data
+        self.train_labels = train_labels
+        self.test_data = test_data
+        self.test_labels = test_labels

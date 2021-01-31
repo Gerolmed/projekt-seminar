@@ -15,6 +15,7 @@ from utils.Result import Result
 from utils.Vectorizer import Vectorizer
 from vectorizer.CountVectorizer import CountVec
 from vectorizer.PosDataDictVectorizer import PosDataDictVectorizer
+from vectorizer.TfIdfVectorizer import TfIdfVec
 
 data_providers: List[DataProvider] = [
     ComparisonDataPreparation(),
@@ -25,14 +26,17 @@ data_providers: List[DataProvider] = [
 
 vectorizers: List[Vectorizer] = [
     #PosDataDictVectorizer(),
-    CountVec()
+    CountVec(),
+    TfIdfVec()
+
+
 ]
 """The vectorizers to add vectorized data based on prepared data"""
 
 
 algorithms: List[Algorithm] = [
     MultinomialNaiveBayes(),
-    # SupportVectorMachine(),
+    SupportVectorMachine(),
     # DecisionTrees(),
     # KNearestNeighbor(),
 ]
