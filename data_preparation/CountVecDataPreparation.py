@@ -1,8 +1,9 @@
 from typing import List, Dict
 
 from loading.LoadingUtils import LoadedData
-from utils.Data import Data, CountVecInputData
+from utils.Data import CountVecInputData
 from utils.DataProvider import DataProvider
+import copy
 
 
 class CountVecDataPreparation(DataProvider):
@@ -16,7 +17,7 @@ class CountVecDataPreparation(DataProvider):
         return vocabulary
 
     def execute(self, rawData: LoadedData, test_ids: List[str]) -> CountVecInputData:
-        raw_data = rawData
+        raw_data = copy.deepcopy(rawData)
         split_parameter = round(len(raw_data) * 0.7)
         all_tokens = []
         all_labels = []
@@ -49,6 +50,9 @@ class CountVecDataPreparation(DataProvider):
         sorted_keys = sorted(vocabulary, key=vocabulary.get, reverse=True)
         for w in sorted_keys:
             sorted_vocabulary[w] = vocabulary[w]
-        print(sorted_vocabulary)
+        index_vocabulary = {}
+        for index, key in enumerate(sorted_vocabulary):
+            index_vocabulary[key] = index
+
         return CountVecInputData(all_tokens[split_parameter:], all_labels[split_parameter:],
-                                 all_tokens[:split_parameter], all_labels[:split_parameter], sorted_vocabulary)
+                                 all_tokens[:split_parameter], all_labels[:split_parameter], index_vocabulary)

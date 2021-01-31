@@ -24,7 +24,7 @@ data_providers: List[DataProvider] = [
 """Prepares data for vectorizer (or directly for algorithm)"""
 
 vectorizers: List[Vectorizer] = [
-    PosDataDictVectorizer(),
+    #PosDataDictVectorizer(),
     CountVec()
 ]
 """The vectorizers to add vectorized data based on prepared data"""
