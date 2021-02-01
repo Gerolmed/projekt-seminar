@@ -26,7 +26,9 @@ class CountVecDataPreparation(DataProvider):
 
         token_frequency: Dict[str, float] = {}
         document_count: int = 0
-
+        vocabulary: Dict[str, int] = {}
+        token_frequency_per_doc: Dict[str, Dict[str, int]] = dict()
+        document_frequency: Dict[str, float] = dict()
         for dataKey, dataValue in rawData.items():
             tokens: List[str] = dataValue.get("tokens")
 
@@ -40,45 +42,56 @@ class CountVecDataPreparation(DataProvider):
                     continue
 
                 labels = dataData["sentiments"]  # todo add _uncertainty as well
-                sentence = list()
+
                 for index, token in enumerate(tokens):
-                    sentence.append((token, labels[index]))
-                tagged_sentences.append((dataKey, sentence))
-
-        document_frequency: Dict[str, float] = dict()
-
-        # Collect data and raw frequencies
-        for group in tagged_sentences:
-            document_id: str = group[0]
-            tagged = group[1]
-            used_tokens_for_document_frequency: List[str] = []
-
-            for index in range(len(tagged)):
-
-                token = tagged[index][0]
-                label = tagged[index][1]
-
-                if document_id in test_ids:
-                    x_test.append(token)
-                    y_test.append(label)
-                else:
-                    x_train.append(token)
-                    y_train.append(label)
-                    if label.endswith("S"):
-                        token_frequency[token] = token_frequency.get(token, 0) + 1
-
-                        # If not already used for document frequency in this document do so
-                        if token not in used_tokens_for_document_frequency:
-                            used_tokens_for_document_frequency.append(token)
-                            document_frequency[token] = document_frequency.get(token, 0) + 1
+                    label = labels[index]
+                    vocabulary[token] = vocabulary.get(token, 0)
+                    if dataKey in test_ids:
+                        x_test.append(token)
+                        y_test.append(label)
                     else:
-                        token_frequency[token] = token_frequency.get(token, 0)
+                        vocabulary[token] += 1
+                        document_frequency[token] = document_frequency.get(token, 0) + 1
 
-        for token, frequency in token_frequency:
-            token_frequency[token] = float(frequency)/document_count
-        for token, frequency in document_frequency:
-            token_frequency[token] = 1 + math.log((1 + document_count) / float(1 + frequency))
-        return TfIdfVecInputData(x_train, y_train, x_test, y_test, token_frequency, document_frequency)
+                        token_frequencies = token_frequency_per_doc.get(dataKey, dict())
+                        token_frequencies[token] = token_frequencies.get(token, 0)
+                        token_frequency_per_doc[dataKey] = token_frequencies
+
+                        x_train.append(token)
+                        y_train.append(label)
+                break  # currently just using first review
+
+        # Sort vocabulary
+        sorted_vocabulary = {}
+        sorted_keys = sorted(vocabulary, key=vocabulary.get, reverse=True)
+        for w in sorted_keys:
+            sorted_vocabulary[w] = vocabulary[w]
+
+        index_vocabulary: List[str] = list()
+        for index, key in enumerate(sorted_vocabulary):
+            index_vocabulary.append(key)
+
+        # Calculate idf
+        for document, frequency in document_frequency:
+            document_frequency[document] = 1 + math.log((1 + document_count) / float(1 + frequency))
+
+        # Produce matrix values
+        row: List[int] = []
+        col: List[int] = []
+        values: List[float] = []
+
+        for document_index, (document, frequencies) in enumerate(token_frequency_per_doc):
+            for token, frequency in frequencies:
+                row.append(document_index)
+                col.append(index_vocabulary.index(token))
+                values.append(frequency * document_frequency.get(token, 0))
+
+        return TfIdfVecInputData(x_train, y_train, x_test, y_test, token_frequency,
+                                 normalize(
+                                     csr_matrix((values, (row, col)), shape=(document_count, len(vocabulary))),
+                                     norm='l2'
+                                 )
+                                 )
 
 
 def transform(dataset, vocab):
@@ -97,4 +110,4 @@ def transform(dataset, vocab):
                 td = freq / float(len(document))  # the number of times a word occured in a document
                 idf_ = 1 + math.log((1 + len(dataset)) / float(1 + idf(word)))
                 values.append((td) * (idf_))
-        return normalize(csr_matrix(((values), (row, col)), shape=(len(dataset), len(vocab))), norm='l2')
+    return normalize(csr_matrix(((values), (row, col)), shape=(len(dataset), len(vocab))), norm='l2')

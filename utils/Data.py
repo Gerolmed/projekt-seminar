@@ -1,5 +1,7 @@
 from typing import List, Union, Dict, Any
 
+from scipy.sparse import csr_matrix
+
 TrainTokens = List[Union[Dict[str, List[str]], List[str]]]
 TrainLabels = List[List[str]]
 TestTokens = List[Union[Dict[str, List[str]], List[str]]]
@@ -23,16 +25,6 @@ class BasicData(Data):
         self.test_labels = test_labels
         self.labelclass_to_id = labelclass_to_id
         self.n_tags = n_tags
-
-
-class TfidfVectorizerData(Data):
-    def __init__(self, train_data: List[List[int]], train_labels: List[str], test_data: List[List[int]],
-                 test_labels: List[str]):
-        super().__init__("tfidf_vectorized")
-        self.train_data = train_data
-        self.train_labels = train_labels
-        self.test_data = test_data
-        self.test_labels = test_labels
 
 
 class PosData(Data):
@@ -82,13 +74,25 @@ class TfIdfVecInputData(Data):
                  train_labels: List[str],
                  test_data: List[str],
                  test_labels: List[str],
-                 token_frequency: Dict[str, float],
-                 document_frequency: Dict[str, float]
+                 tfidf_matrix: csr_matrix
+             ):
+        super().__init__("tfidf_vec_input_data")
+        self.train_data = train_data
+        self.train_labels = train_labels
+        self.test_data = test_data
+        self.test_labels = test_labels
+        self.tfidf_matrix = tfidf_matrix
+
+
+class TfIdfVecData(Data):
+    def __init__(self,
+                 train_data: List[float],
+                 train_labels: List[str],
+                 test_data: List[float],
+                 test_labels: List[str]
              ):
         super().__init__("tfidf_vec_data")
         self.train_data = train_data
         self.train_labels = train_labels
         self.test_data = test_data
         self.test_labels = test_labels
-        self.token_frequency = token_frequency
-        self.document_frequency = document_frequency

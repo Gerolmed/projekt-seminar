@@ -59,6 +59,6 @@ class CountVecDataPreparation(DataProvider):
         for index, key in enumerate(sorted_vocabulary):
             index_vocabulary[key] = index
 
-        print(y_train)
+        # print(y_train)
 
         return CountVecInputData(x_train, y_train, x_test, y_test, index_vocabulary)
