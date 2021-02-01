@@ -11,7 +11,7 @@ from utils.Data import CountVecInputData, TfIdfVecInputData
 from utils.DataProvider import DataProvider
 
 
-class CountVecDataPreparation(DataProvider):
+class TfIdfVecInputDataPreparation(DataProvider):
     def execute(self, rawData: LoadedData, test_ids: List[str]) -> TfIdfVecInputData:
 
         rawData = copy.deepcopy(rawData)
@@ -42,20 +42,23 @@ class CountVecDataPreparation(DataProvider):
                     continue
 
                 labels = dataData["sentiments"]  # todo add _uncertainty as well
+                usedTokens: List[str] = []
 
                 for index, token in enumerate(tokens):
                     label = labels[index]
-                    vocabulary[token] = vocabulary.get(token, 0)
                     if dataKey in test_ids:
                         x_test.append(token)
                         y_test.append(label)
                     else:
-                        vocabulary[token] += 1
-                        document_frequency[token] = document_frequency.get(token, 0) + 1
-
-                        token_frequencies = token_frequency_per_doc.get(dataKey, dict())
-                        token_frequencies[token] = token_frequencies.get(token, 0)
-                        token_frequency_per_doc[dataKey] = token_frequencies
+                        vocabulary[token] = vocabulary.get(token, 0)
+                        if label.endswith("S"):
+                            vocabulary[token] += 1
+                            if token not in usedTokens:
+                                document_frequency[token] = document_frequency.get(token, 0) + 1
+                                usedTokens.append(token)
+                            token_frequencies = token_frequency_per_doc.get(dataKey, dict())
+                            token_frequencies[token] = token_frequencies.get(token, 0)
+                            token_frequency_per_doc[dataKey] = token_frequencies
 
                         x_train.append(token)
                         y_train.append(label)
@@ -72,7 +75,7 @@ class CountVecDataPreparation(DataProvider):
             index_vocabulary.append(key)
 
         # Calculate idf
-        for document, frequency in document_frequency:
+        for document, frequency in document_frequency.items():
             document_frequency[document] = 1 + math.log((1 + document_count) / float(1 + frequency))
 
         # Produce matrix values
@@ -80,13 +83,13 @@ class CountVecDataPreparation(DataProvider):
         col: List[int] = []
         values: List[float] = []
 
-        for document_index, (document, frequencies) in enumerate(token_frequency_per_doc):
-            for token, frequency in frequencies:
+        for document_index, (document, frequencies) in enumerate(token_frequency_per_doc.items()):
+            for token, frequency in frequencies.items():
                 row.append(document_index)
                 col.append(index_vocabulary.index(token))
                 values.append(frequency * document_frequency.get(token, 0))
-
-        return TfIdfVecInputData(x_train, y_train, x_test, y_test, token_frequency,
+        print("")
+        return TfIdfVecInputData(x_train, y_train, x_test, y_test,
                                  normalize(
                                      csr_matrix((values, (row, col)), shape=(document_count, len(vocabulary))),
                                      norm='l2'
