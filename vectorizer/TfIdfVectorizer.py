@@ -1,8 +1,5 @@
 from typing import Dict
 
-from scipy.sparse import csr_matrix
-from sklearn.preprocessing import normalize
-
 from utils.Data import TfIdfVecInputData, TfIdfVecData
 from utils.Vectorizer import Vectorizer
 

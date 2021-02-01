@@ -19,16 +19,16 @@ from vectorizer.PosDataDictVectorizer import PosDataDictVectorizer
 from vectorizer.TfIdfVectorizer import TfIdfVec
 
 data_providers: List[DataProvider] = [
-    ComparisonDataPreparation(),
-    PosPreparation(),
-    CountVecDataPreparation(),
+    #ComparisonDataPreparation(),
+    #PosPreparation(),
+    #CountVecDataPreparation(),
     TfIdfVecInputDataPreparation(),
 ]
 """Prepares data for vectorizer (or directly for algorithm)"""
 
 vectorizers: List[Vectorizer] = [
-    PosDataDictVectorizer(),
-    CountVec(),
+    #PosDataDictVectorizer(),
+    #CountVec(),
     TfIdfVec()
 
 
@@ -38,7 +38,7 @@ vectorizers: List[Vectorizer] = [
 
 algorithms: List[Algorithm] = [
     # MultinomialNaiveBayes(),
-    SupportVectorMachine(),
+    # SupportVectorMachine(),
     # DecisionTrees(),
     # KNearestNeighbor(),
 ]

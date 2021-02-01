@@ -57,7 +57,7 @@ class TfIdfVecInputDataPreparation(DataProvider):
                                 document_frequency[token] = document_frequency.get(token, 0) + 1
                                 usedTokens.append(token)
                             token_frequencies = token_frequency_per_doc.get(dataKey, dict())
-                            token_frequencies[token] = token_frequencies.get(token, 0)
+                            token_frequencies[token] = token_frequencies.get(token, 0) + 1
                             token_frequency_per_doc[dataKey] = token_frequencies
 
                         x_train.append(token)
@@ -95,22 +95,3 @@ class TfIdfVecInputDataPreparation(DataProvider):
                                      norm='l2'
                                  )
                                  )
-
-
-def transform(dataset, vocab):
-    row = []
-    col = []
-    values = []
-    for ibx, document in enumerate(dataset):
-        word_freq = dict(Counter(document.split()))
-        for word, freq in word_freq.items():
-            col_index = vocab.get(word, -1)
-            if col_index != -1:
-                if len(word) < 2:
-                    continue
-                col.append(col_index)
-                row.append(ibx)
-                td = freq / float(len(document))  # the number of times a word occured in a document
-                idf_ = 1 + math.log((1 + len(dataset)) / float(1 + idf(word)))
-                values.append((td) * (idf_))
-    return normalize(csr_matrix(((values), (row, col)), shape=(len(dataset), len(vocab))), norm='l2')
