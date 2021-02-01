@@ -1,3 +1,4 @@
+import copy
 from typing import List
 
 from loading.LoadingUtils import LoadedData
@@ -7,6 +8,8 @@ from utils.DataProvider import DataProvider
 
 class ComparisonDataPreparation(DataProvider):
     def execute(self, rawData: LoadedData, test_ids: List[str]) -> BasicData:
+        rawData = copy.deepcopy(rawData)
+
         keys = list(rawData.keys())
 
         keys_train = list(filter(lambda key: key not in test_ids, keys))

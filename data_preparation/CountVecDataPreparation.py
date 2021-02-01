@@ -30,7 +30,7 @@ class CountVecDataPreparation(DataProvider):
                 labels = dataData["sentiments"]  # todo add _uncertainty as well
                 sentence = list()
                 for index, token in enumerate(tokens):
-                    sentence.append((token, labels[index]))
+                    sentence.append((token, "S" if labels[index].endswith("S") else "O"))
                     vocabulary.setdefault(token, 0)
                 tagged_sentences.append((dataKey, sentence))
 
