@@ -6,7 +6,6 @@ class SupportVectorMachine(BaseAlgorithm):
 
     def __init__(self):
         super().__init__("Linear Support Vector Machine", ["count_vec_data",
-                                                           "tfidf_vec_data",
                                                            "dict_vec_pos_data"
                                                            ])
 

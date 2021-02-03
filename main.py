@@ -7,7 +7,6 @@ from algorithms.SVM import SupportVectorMachine
 from data_preparation.ComparisonDataPreparation import ComparisonDataPreparation
 from data_preparation.CountVecDataPreparation import CountVecDataPreparation
 from data_preparation.PosPreparation import PosPreparation
-from data_preparation.TfIdfVecDataPreparation import TfIdfVecInputDataPreparation
 from loading.LoadingUtils import LoadingUtils
 from utils.Algorithm import Algorithm
 from utils.Data import Data
@@ -16,22 +15,18 @@ from utils.Result import Result
 from utils.Vectorizer import Vectorizer
 from vectorizer.CountVectorizer import CountVec
 from vectorizer.PosDataDictVectorizer import PosDataDictVectorizer
-from vectorizer.TfIdfVectorizer import TfIdfVec
+
 
 data_providers: List[DataProvider] = [
     #ComparisonDataPreparation(),
     #PosPreparation(),
     #CountVecDataPreparation(),
-    TfIdfVecInputDataPreparation(),
 ]
 """Prepares data for vectorizer (or directly for algorithm)"""
 
 vectorizers: List[Vectorizer] = [
     #PosDataDictVectorizer(),
     #CountVec(),
-    TfIdfVec()
-
-
 ]
 """The vectorizers to add vectorized data based on prepared data"""
 
@@ -39,7 +34,7 @@ vectorizers: List[Vectorizer] = [
 algorithms: List[Algorithm] = [
     # MultinomialNaiveBayes(),
     # SupportVectorMachine(),
-    # DecisionTrees(),
+    # DecisionTrees()
     # KNearestNeighbor(),
 ]
 """The Algorithms to use"""
