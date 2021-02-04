@@ -4,10 +4,11 @@ from typing import List
 from loading.LoadingUtils import LoadedData
 from utils.Data import BasicData
 from utils.DataProvider import DataProvider
+from utils.DataSelector import DataSelector
 
 
 class ComparisonDataPreparation(DataProvider):
-    def execute(self, rawData: LoadedData, test_ids: List[str]) -> BasicData:
+    def execute(self, rawData: LoadedData, test_ids: List[str], data_selector: DataSelector) -> BasicData:
         rawData = copy.deepcopy(rawData)
 
         keys = list(rawData.keys())
@@ -21,16 +22,16 @@ class ComparisonDataPreparation(DataProvider):
         for k in keys_train:
             curr_users = [s for s in rawData[k].keys() if s != 'tokens']
             # for illlustration only the annotation of one user is used here -> curr_users[0]
-            train_labels.append(rawData[k][curr_users[0]]["sentiments"])
-            train_labels_uncertainty.append(rawData[k][curr_users[0]]["sentiments_uncertainty"])
+            train_labels.append(rawData[k][curr_users[0]][data_selector.type_name])
+            train_labels_uncertainty.append(rawData[k][curr_users[0]][data_selector.type_name + "_uncertainty"])
         test_tokens = [rawData[k]['tokens'] for k in keys_test]
         test_labels = list()
         test_labels_uncertainty = list()
         for k in keys_test:
             curr_users = [s for s in rawData[k].keys() if s != 'tokens']
             # for illustration only the annotation of one user is used here -> curr_users[0]
-            test_labels.append(rawData[k][curr_users[0]]["sentiments"])
-            test_labels_uncertainty.append(rawData[k][curr_users[0]]["sentiments_uncertainty"])
+            test_labels.append(rawData[k][curr_users[0]][data_selector.type_name])
+            test_labels_uncertainty.append(rawData[k][curr_users[0]][data_selector.type_name + "_uncertainty"])
 
         all_labelclasses = set()
         for ds in [train_labels, test_labels]:

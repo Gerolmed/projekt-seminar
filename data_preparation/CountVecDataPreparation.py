@@ -5,10 +5,12 @@ from utils.Data import CountVecInputData
 from utils.DataProvider import DataProvider
 import copy
 
+from utils.DataSelector import DataSelector
+
 
 class CountVecDataPreparation(DataProvider):
     # TODO change TestData to TestIDs
-    def execute(self, rawData: LoadedData, test_ids: List[str]) -> CountVecInputData:
+    def execute(self, rawData: LoadedData, test_ids: List[str], data_selector: DataSelector) -> CountVecInputData:
 
         rawData = copy.deepcopy(rawData)
 
@@ -27,10 +29,10 @@ class CountVecDataPreparation(DataProvider):
             for reviewKey, dataData in dataValue.items():
                 if reviewKey == "tokens":
                     continue
-                labels = dataData["sentiments"]  # todo add _uncertainty as well
+                labels = dataData[data_selector.type_name]  # todo add _uncertainty as well
                 sentence = list()
                 for index, token in enumerate(tokens):
-                    sentence.append((token, "S" if labels[index].endswith("S") else "O"))
+                    sentence.append((token, data_selector.type_symbol if labels[index].endswith(data_selector.type_symbol) else "O"))
                     vocabulary.setdefault(token, 0)
                 tagged_sentences.append((dataKey, sentence))
 
