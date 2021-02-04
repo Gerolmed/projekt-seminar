@@ -1,7 +1,8 @@
 from typing import Dict, Union, List
 import json
-from loading.StopWords import removeStopWords
+from loading.Preprocessing import removeStopWords
 from utils.Data import Data, BasicData
+from loading.Preprocessing import removeStopWords, stemming, lemmantising
 
 Tokens = List[str]
 Review = Dict[str, Union[Dict[str, List[str]], Tokens]]
@@ -36,7 +37,11 @@ class LoadingUtils:
             raw_data[k]['tokens'] = tokens
 
         # remove Stopwords
-        raw_data: RawData = removeStopWords(raw_data, test_ids)
+        # raw_data: RawData = removeStopWords(raw_data, test_ids)
+
+        # raw_data: RawData = stemming(raw_data)
+
+        raw_data: RawData = lemmantising(raw_data)
 
         # currently just merge uncertain in sentiments
         for (sentence_key, value) in raw_data.items():

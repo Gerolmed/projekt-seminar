@@ -1,3 +1,4 @@
+from nltk import PorterStemmer, WordNetLemmatizer
 from nltk.corpus import stopwords
 from typing import Dict, Union, List
 
@@ -6,6 +7,9 @@ RawData = Dict[str, Dict[str, Union[Dict[str, List[str]], List[str]]]]
 stopWords = list(stopwords.words('english'))
 stopWords.extend([".", ",", "!", "(", ")", '"', "-", "'", ":", ";", "?", "=", "<", ">", "https", "div", "&", "/", "*",
                   "[", "]"])
+
+ps = PorterStemmer()
+lemmatizer = WordNetLemmatizer()
 
 
 def short_array(original: List[str], indexes: List[int]) -> List[str]:
@@ -35,4 +39,20 @@ def removeStopWords(data: RawData, test_data_ids: List[str]):
                 continue
             for label_type, rating in val.items():
                 data[k][key][label_type] = short_array(rating, remove_index)
+    return data
+
+
+def stemming(data: RawData):
+    for i, (k, v) in enumerate(data.items()):
+        tokens = v.get('tokens')
+        tokens = [ps.stem(token) for token in tokens]
+        data[k]['tokens'] = tokens
+    return data
+
+
+def lemmantising(data: RawData):
+    for i, (k, v) in enumerate(data.items()):
+        tokens = v.get('tokens')
+        tokens = [lemmatizer.lemmatize(token) for token in tokens]
+        data[k]['tokens'] = tokens
     return data
