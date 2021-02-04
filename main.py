@@ -141,8 +141,8 @@ def print_combination(combination: List[Tuple[DataSelector, Result]], f1_score: 
     calc_text: str = "("
     for selector, result in combination:
         used_text += f"{selector.type_name} ({result.data_name} -> {result.algorithm_name}) "
-        calc_text += f"{str(result.f1)} +"
-    calc_text = calc_text[:len(calc_text) - 2]
+        calc_text += f"{str(result.f1)} + "
+    calc_text = calc_text[:len(calc_text) - 3]
     calc_text += f") / {str(len(combination))}"
     calc_text += " = " + str(f1_score)
 
