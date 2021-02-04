@@ -71,6 +71,11 @@ def run_pipeline(data_selector: DataSelector):
     for algorithm in algorithms:
         for data_type in algorithm.get_supported_data_types():
             selected_data = data_dict.get(data_type)
+
+            if selected_data is None:
+                print(f"Skipping type {data_type} for {algorithm.get_name()} because data is missing!")
+                continue
+
             print(f"Executing {algorithm.get_name()} with {selected_data.data_type} ({data_selector.type_name})...")
             result = algorithm.execute(selected_data)
             print(f"Finished executing {algorithm.get_name()} in {round((result.train_time + result.test_time), 3)} "
