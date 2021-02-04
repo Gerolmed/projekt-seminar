@@ -118,7 +118,7 @@ def combine_results(total_results: Dict[DataSelector, List[Result]], index=0, pr
         return previous
 
     out_list: List[List[Tuple[DataSelector, Result]]] = []
-    [selector, results] = list(total_results.items())[0]
+    [selector, results] = list(total_results.items())[index]
 
     if index == 0:
         for result in results:
