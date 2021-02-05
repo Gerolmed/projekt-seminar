@@ -1,6 +1,6 @@
 from typing import List, Union, Dict, Any
+import pandas as pd
 
-from scipy.sparse import csr_matrix
 
 TrainTokens = List[Union[Dict[str, List[str]], List[str]]]
 TrainLabels = List[List[str]]
@@ -66,3 +66,14 @@ class CountVecData(Data):
         self.train_labels = train_labels
         self.test_data = test_data
         self.test_labels = test_labels
+
+
+class DataFrameData(Data):
+    def __init__(self, train_data: pd.DataFrame, train_labels: pd.DataFrame, test_data: pd.DataFrame,
+                 test_labels: pd.DataFrame):
+        super().__init__("dfData")
+        self.train_data = train_data
+        self.train_labels = train_labels
+        self.test_data = test_data
+        self.test_labels = test_labels
+

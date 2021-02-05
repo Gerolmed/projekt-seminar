@@ -1,6 +1,6 @@
 from typing import Dict, Union, List
 import json
-from loading.Preprocessing import removeStopWords
+from loading.Preprocessing import removeStopWords, dataToDataFrame, dataFrameToCSV
 from utils.Data import Data, BasicData
 from loading.Preprocessing import removeStopWords, stemming, lemmantising
 from utils.DataSelector import DataSelector
@@ -64,12 +64,14 @@ class LoadingUtils:
                 v_new = data_new.setdefault(review_id, dict())
                 for field, field_data in list(review_data.items()):
                     v1_new = v_new.setdefault(field, dict())
+                    """
                     if field != 'tokens':
                         for k2, v2 in list(field_data.items()):
-                            v2_new = [l.replace('B_', '').replace('I_', '') for l in v2]
-                            v1_new[k2] = v2_new
+                            #v2_new = [l.replace('B_', '').replace('I_', '') for l in v2]
+                            #v1_new[k2] = v2_new
                     else:
-                        v_new[field] = field_data
+                    """
+                    v_new[field] = field_data
         return data_new
 
     @staticmethod

@@ -9,7 +9,7 @@ from utils.DataSelector import DataSelector
 
 
 class CountVecDataPreparation(DataProvider):
-    # TODO change TestData to TestIDs
+
     def execute(self, rawData: LoadedData, test_ids: List[str], data_selector: DataSelector) -> CountVecInputData:
 
         rawData = copy.deepcopy(rawData)

@@ -8,6 +8,7 @@ from algorithms.KNN import KNearestNeighbor
 from algorithms.SVM import SupportVectorMachine
 from data_preparation.ComparisonDataPreparation import ComparisonDataPreparation
 from data_preparation.CountVecDataPreparation import CountVecDataPreparation
+from data_preparation.DataFramePreparation import DataFramePreparation
 from data_preparation.PosPreparation import PosPreparation
 from loading.LoadingUtils import LoadingUtils
 from utils.Algorithm import Algorithm
@@ -25,21 +26,22 @@ data_selectors: List[DataSelector] = [
 ]
 
 data_providers: List[DataProvider] = [
-    ComparisonDataPreparation(),
-    # PosPreparation(),
-    CountVecDataPreparation(),
+    #ComparisonDataPreparation(),
+    #PosPreparation(),
+    #CountVecDataPreparation(),
+    DataFramePreparation()
 ]
 """Prepares data for vectorizer (or directly for algorithm)"""
 
 vectorizers: List[Vectorizer] = [
-    # PosDataDictVectorizer(),
-    CountVec(),
+    PosDataDictVectorizer(),
+    #CountVec(),
 ]
 """The vectorizers to add vectorized data based on prepared data"""
 
 algorithms: List[Algorithm] = [
-    ComparisonClassifier(),
-    # MultinomialNaiveBayes(),
+    #ComparisonClassifier(),
+    #MultinomialNaiveBayes(),
     SupportVectorMachine(),
     # DecisionTrees()
     # KNearestNeighbor(),
