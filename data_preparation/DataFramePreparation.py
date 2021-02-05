@@ -12,7 +12,7 @@ class DataFramePreparation(DataProvider):
 
     def execute(self, rawData: LoadedData, test_ids: List[str], data_selector: DataSelector):
         dataFrame = pd.read_csv("./Data.csv")
-
+        # TODO implement Stopwords and lemmatizing
         # Transform raw data to pandas DataFrame including POS-tags and save as CSV-file
         # dataFrame = dataToDataFrame(rawData, test_ids)
         # dataFrameToCSV(dataFrame)
@@ -28,6 +28,5 @@ class DataFramePreparation(DataProvider):
 
         x_test = test_data[["Token", "POS_tag"]].to_dict('records')
         y_test = test_data.drop(["Token", "POS_tag"], axis=1)
-
 
         return DataFrameData(x_train, y_train, x_test, y_test)

@@ -1,5 +1,3 @@
-import copy
-
 from nltk import PorterStemmer, WordNetLemmatizer, pos_tag
 from nltk.corpus import stopwords
 from typing import Dict, Union, List, Tuple
@@ -99,7 +97,7 @@ def dataToDataFrame(data: RawData, test_data_ids: List[str]) -> pd.DataFrame:
 
 
 def dataFrameToCSV(dataFrame: pd.DataFrame):
-    csv_data = dataFrame.to_csv('Data.csv', index=True)
+    dataFrame.to_csv('Data.csv', index=True)
 
 
 def pos_tagger(tokens: List[str]) -> List[Tuple[str, str]]:
