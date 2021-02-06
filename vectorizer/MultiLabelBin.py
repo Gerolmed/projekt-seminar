@@ -3,7 +3,7 @@ from utils.Data import MultiLabelData, MultiLabelBinData
 from utils.Vectorizer import Vectorizer
 
 
-class MultiLabelVectorizer(Vectorizer):
+class MultiLabelBin(Vectorizer):
 
     def __init__(self):
         super().__init__("multi_label_data")
