@@ -9,7 +9,7 @@ from utils.DataSelector import DataSelector
 
 class PosPreparation(DataProvider):
 
-    def execute(self, rawData: LoadedData, test_ids: List[str], data_selector: DataSelector) -> Data:
+    def execute(self, rawData: LoadedData, test_ids: List[str], data_selectors: List[DataSelector]) -> Data:
         rawData = copy.deepcopy(rawData)
         tagged_sentences: List[Tuple[str, List[Tuple[str, str]]]] = list()
 
@@ -24,10 +24,13 @@ class PosPreparation(DataProvider):
             for reviewKey, dataData in dataValue.items():
                 if reviewKey == "tokens":
                     continue
-                labels = dataData[data_selector.type_name]  # todo add _uncertainty as well
                 sentence = list()
                 for index, token in enumerate(tokens):
-                    sentence.append((token, data_selector.type_symbol if labels[index].endswith(data_selector.type_symbol) else "O"))
+                    clazz = ""
+                    for data_selector in data_selectors:
+                        labels = dataData[data_selector.type_name]
+                        clazz += data_selector.type_symbol if labels[index].endswith(data_selector.type_symbol) else "O"
+                    sentence.append((token, clazz))
                 tagged_sentences.append((dataKey, sentence))
 
         for group in tagged_sentences:

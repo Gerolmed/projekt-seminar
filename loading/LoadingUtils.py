@@ -26,7 +26,7 @@ def merge_sentiments(sentiments: List[str], sentiments_uncertainty: List[str]):
 
 class LoadingUtils:
     @staticmethod
-    def read_data(filename: str, test_ids_file: str, data_selector: DataSelector) -> [Data, LoadedData]:
+    def read_data(filename: str, test_ids_file: str, data_selectors: List[DataSelector]) -> [Data, LoadedData]:
 
         raw_data: RawData = LoadingUtils.__open_file(filename)
         test_ids = LoadingUtils.__open_test_ids(test_ids_file)
@@ -49,10 +49,11 @@ class LoadingUtils:
             for review_key, review_data in value.items():
                 if review_key == "tokens":
                     continue
-                raw_data[sentence_key][review_key][data_selector.type_name] = merge_sentiments(
-                    review_data.get(data_selector.type_name),
-                    review_data.get(
-                        data_selector.type_name + "_uncertainty"))
+                for data_selector in data_selectors:
+                    raw_data[sentence_key][review_key][data_selector.type_name] = merge_sentiments(
+                        review_data.get(data_selector.type_name),
+                        review_data.get(
+                            data_selector.type_name + "_uncertainty"))
         return [raw_data, test_ids]
 
     @staticmethod

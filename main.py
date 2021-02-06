@@ -22,26 +22,27 @@ from vectorizer.PosDataDictVectorizer import PosDataDictVectorizer
 
 data_selectors: List[DataSelector] = [
     DataSelector("sentiments", "S"),
-    DataSelector("aspects", "A")
+    DataSelector("aspects", "A"),
+    DataSelector("modifiers", "M")
 ]
 
 data_providers: List[DataProvider] = [
-    #ComparisonDataPreparation(),
-    #PosPreparation(),
-    #CountVecDataPreparation(),
-    DataFramePreparation()
+    # ComparisonDataPreparation(),
+    PosPreparation(),
+    # CountVecDataPreparation(),
+    # DataFramePreparation()
 ]
 """Prepares data for vectorizer (or directly for algorithm)"""
 
 vectorizers: List[Vectorizer] = [
     PosDataDictVectorizer(),
-    #CountVec(),
+    # CountVec(),
 ]
 """The vectorizers to add vectorized data based on prepared data"""
 
 algorithms: List[Algorithm] = [
-    #ComparisonClassifier(),
-    #MultinomialNaiveBayes(),
+    # ComparisonClassifier(),
+    # MultinomialNaiveBayes(),
     SupportVectorMachine(),
     # DecisionTrees()
     # KNearestNeighbor(),
@@ -49,15 +50,15 @@ algorithms: List[Algorithm] = [
 """The Algorithms to use"""
 
 
-def run_pipeline(data_selector: DataSelector):
+def run_pipeline():
     data_dict: Dict[str, Data] = dict()
     """Dictionary to store different data types by id"""
 
     # Load raw and basic data
-    [raw_data, test_ids] = LoadingUtils.read_data(r'./data_laptop_absa.json', r"./test_ids.json", data_selector)
+    [raw_data, test_ids] = LoadingUtils.read_data(r'./data_laptop_absa.json', r"./test_ids.json", data_selectors)
     # Create different base data formats
     for data_provider in data_providers:
-        data = data_provider.execute(raw_data, test_ids, data_selector)
+        data = data_provider.execute(raw_data, test_ids, data_selectors)
         data_dict.setdefault(data.data_type, data)
 
     # Vectorize data and add it to data list
@@ -78,7 +79,7 @@ def run_pipeline(data_selector: DataSelector):
                 print(f"Skipping type {data_type} for {algorithm.get_name()} because data is missing!")
                 continue
 
-            print(f"Executing {algorithm.get_name()} with {selected_data.data_type} ({data_selector.type_name})...")
+            print(f"Executing {algorithm.get_name()} with {selected_data.data_type}...")
             result = algorithm.execute(selected_data)
             print(f"Finished executing {algorithm.get_name()} in {round((result.train_time + result.test_time), 3)} "
                   f"sec ({round((result.train_time + result.test_time) / 60, 3)} min)!")
@@ -87,9 +88,9 @@ def run_pipeline(data_selector: DataSelector):
     return results
 
 
-def print_results(data_selector: DataSelector, results: List[Result]):
+def print_results(results: List[Result]):
     print("============================================")
-    print(f"Printing results for {data_selector.type_name}")
+    print(f"Printing results")
     print("============================================")
 
     # Prints all results in a fixed format after execution
@@ -111,72 +112,12 @@ def print_results(data_selector: DataSelector, results: List[Result]):
 
 
 # #################################
-# Result combination
-# #################################
-
-def combine_results(total_results: Dict[DataSelector, List[Result]], index=0, previous: List[List[Tuple[DataSelector, Result]]] = []) -> List[List[Tuple[DataSelector, Result]]]:
-
-    if len(total_results.items()) <= index:
-        return previous
-
-    out_list: List[List[Tuple[DataSelector, Result]]] = []
-    [selector, results] = list(total_results.items())[index]
-
-    if index == 0:
-        for result in results:
-            out_list.append([(selector, result)])
-    else:
-        for combination in previous:
-            for result in results:
-                new_list = combination.copy()
-                new_list.append((selector, result))
-                out_list.append(new_list)
-    return combine_results(total_results, index + 1, out_list)
-
-
-# #################################
 # Main Run
 # #################################
 
-def print_combination(combination: List[Tuple[DataSelector, Result]], f1_score: float):
-    used_text: str = "Used: "
-    calc_text: str = "("
-    for selector, result in combination:
-        used_text += f"{selector.type_name} ({result.data_name} -> {result.algorithm_name}) "
-        calc_text += f"{str(result.f1)} + "
-    calc_text = calc_text[:len(calc_text) - 3]
-    calc_text += f") / {str(len(combination))}"
-    calc_text += " = " + str(f1_score)
-
-    print("============================================")
-    print(used_text)
-    print(calc_text)
-    print(f"F1-score: {f1_score}")
-    print("============================================")
-    pass
-
 
 def main():
-    total_results: Dict[DataSelector, List[Result]] = dict()
-    for data_selector in data_selectors:
-        total_results.setdefault(data_selector, run_pipeline(data_selector))
-
-    for data_selector, result in total_results.items():
-        print_results(data_selector, result)
-
-    if len(data_selectors) < 2:
-        print("Not enough selectors for a combined f1 score")
-        return
-
-    all_combinations = combine_results(total_results)
-
-    for combination in all_combinations:
-        f1_score = 0
-        for selector, result in combination:
-            f1_score += result.f1
-        f1_score /= len(combination)
-
-        print_combination(combination, f1_score)
+    print_results(run_pipeline())
 
 
 main()
