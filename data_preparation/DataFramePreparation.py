@@ -1,16 +1,16 @@
 from typing import List
 
 from loading.LoadingUtils import LoadedData
-from utils.Data import DataFrameData
+from utils.Data import MultiLabelData
 from utils.DataProvider import DataProvider
 import pandas as pd
-
+from sklearn.preprocessing import MultiLabelBinarizer
 from utils.DataSelector import DataSelector
 
 
 class DataFramePreparation(DataProvider):
 
-    def execute(self, rawData: LoadedData, test_ids: List[str], data_selector: DataSelector):
+    def execute(self, rawData: LoadedData, test_ids: List[str], data_selector: DataSelector) -> MultiLabelData:
         dataFrame = pd.read_csv("./Data.csv")
         # TODO implement Stopwords and lemmatizing
         # Transform raw data to pandas DataFrame including POS-tags and save as CSV-file
@@ -24,9 +24,9 @@ class DataFramePreparation(DataProvider):
         test_data = dataFrame.loc[dataFrame["inTestIDs"] == bool(True)].drop(["SentenceNr", "inTestIDs"], axis=1)
 
         x_train = train_data[["Token", "POS_tag"]].to_dict('records')
-        y_train = train_data.drop(["Token", "POS_tag"], axis=1)
+        y_train = train_data.drop(["Token", "POS_tag"], axis=1).values.tolist()
 
         x_test = test_data[["Token", "POS_tag"]].to_dict('records')
-        y_test = test_data.drop(["Token", "POS_tag"], axis=1)
+        y_test = test_data.drop(["Token", "POS_tag"], axis=1).values.tolist()
 
-        return DataFrameData(x_train, y_train, x_test, y_test)
+        return MultiLabelData(x_train, y_train, x_test, y_test)

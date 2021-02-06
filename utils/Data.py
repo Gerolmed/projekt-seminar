@@ -68,12 +68,21 @@ class CountVecData(Data):
         self.test_labels = test_labels
 
 
-class DataFrameData(Data):
-    def __init__(self, train_data: pd.DataFrame, train_labels: pd.DataFrame, test_data: pd.DataFrame,
-                 test_labels: pd.DataFrame):
-        super().__init__("dfData")
+class MultiLabelData(Data):
+    def __init__(self, train_data: Dict[str, str], train_labels: List[List[str]], test_data: Dict[str, str],
+                 test_labels: List[List[str]]):
+        super().__init__("multi_label_data")
         self.train_data = train_data
         self.train_labels = train_labels
         self.test_data = test_data
         self.test_labels = test_labels
 
+
+class MultiLabelBinData(Data):
+    def __init__(self, train_data: Dict[str, str], train_labels: List[List[int]], test_data: Dict[str, str],
+                 test_labels: List[List[int]]):
+        super().__init__("multi_label_bin_data")
+        self.train_data = train_data
+        self.train_labels = train_labels
+        self.test_data = test_data
+        self.test_labels = test_labels
