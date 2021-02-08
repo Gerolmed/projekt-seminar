@@ -12,18 +12,6 @@ RawData = Dict[str, Dict[str, Union[Dict[str, List[str]], List[str]]]]
 seed: int = 1234567890
 
 
-def merge_sentiments(sentiments: List[str], sentiments_uncertainty: List[str]):
-    merged: List[str] = []
-
-    for index, sentiment in enumerate(sentiments):
-        if sentiment != "O":
-            merged.append(sentiment)
-        else:
-            merged.append(sentiments_uncertainty[index])
-
-    return merged
-
-
 class LoadingUtils:
     @staticmethod
     def read_data(filename: str, test_ids_file: str, data_selector: DataSelector) -> [Data, LoadedData]:
@@ -32,6 +20,7 @@ class LoadingUtils:
         test_ids = LoadingUtils.__open_test_ids(test_ids_file)
 
         # lowercasing of tokens
+
         for i, (k, v) in enumerate(raw_data.items()):
             tokens = v.get('tokens')
             tokens = [token.lower() for token in tokens]
@@ -44,15 +33,6 @@ class LoadingUtils:
 
         raw_data: RawData = lemmantising(raw_data)
 
-        # currently just merge uncertain in sentiments
-        for (sentence_key, value) in raw_data.items():
-            for review_key, review_data in value.items():
-                if review_key == "tokens":
-                    continue
-                raw_data[sentence_key][review_key][data_selector.type_name] = merge_sentiments(
-                    review_data.get(data_selector.type_name),
-                    review_data.get(
-                        data_selector.type_name + "_uncertainty"))
         return [raw_data, test_ids]
 
     @staticmethod
@@ -64,14 +44,13 @@ class LoadingUtils:
                 v_new = data_new.setdefault(review_id, dict())
                 for field, field_data in list(review_data.items()):
                     v1_new = v_new.setdefault(field, dict())
-                    """
+
                     if field != 'tokens':
                         for k2, v2 in list(field_data.items()):
-                            #v2_new = [l.replace('B_', '').replace('I_', '') for l in v2]
-                            #v1_new[k2] = v2_new
+                            v2_new = [l.replace('B', '').replace('I', '').replace('_', '') for l in v2]
+                            v1_new[k2] = v2_new
                     else:
-                    """
-                    v_new[field] = field_data
+                        v_new[field] = field_data
         return data_new
 
     @staticmethod

@@ -1,8 +1,10 @@
 import copy
 from typing import List, Dict, Tuple
 
+from algorithms.LogisticReg import LogisticReg
 from algorithms.ComparisonClassifier import ComparisonClassifier
 from algorithms.DecisionTrees import DecisionTrees
+from algorithms.MLP import MultiLayerPerceptron
 from algorithms.NaiveBayes import MultinomialNaiveBayes
 from algorithms.KNN import KNearestNeighbor
 from algorithms.SVM import SupportVectorMachine
@@ -22,29 +24,32 @@ from vectorizer.PosDataDictVectorizer import PosDataDictVectorizer
 
 data_selectors: List[DataSelector] = [
     DataSelector("sentiments", "S"),
-    DataSelector("aspects", "A")
+    DataSelector("aspects", "A"),
+    DataSelector("modifiers", "M")
 ]
 
 data_providers: List[DataProvider] = [
-    #ComparisonDataPreparation(),
-    #PosPreparation(),
-    #CountVecDataPreparation(),
-    DataFramePreparation()
+    # ComparisonDataPreparation(),
+    PosPreparation(),
+    # CountVecDataPreparation(),
+    # DataFramePreparation()
 ]
 """Prepares data for vectorizer (or directly for algorithm)"""
 
 vectorizers: List[Vectorizer] = [
     PosDataDictVectorizer(),
-    #CountVec(),
+    # CountVec(),
 ]
 """The vectorizers to add vectorized data based on prepared data"""
 
 algorithms: List[Algorithm] = [
-    #ComparisonClassifier(),
-    #MultinomialNaiveBayes(),
-    SupportVectorMachine(),
-    # DecisionTrees()
+    # ComparisonClassifier(),
+    # MultinomialNaiveBayes(),
+    # SupportVectorMachine(),
+    # DecisionTrees(),
     # KNearestNeighbor(),
+    # LogisticReg(),
+    MultiLayerPerceptron()
 ]
 """The Algorithms to use"""
 

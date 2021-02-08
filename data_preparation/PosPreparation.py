@@ -2,6 +2,7 @@ import copy
 from typing import List, Tuple
 
 from loading.LoadingUtils import LoadedData
+from loading.Preprocessing import pos_tagger
 from utils.Data import Data, PosData
 from utils.DataProvider import DataProvider
 from utils.DataSelector import DataSelector
@@ -11,7 +12,8 @@ class PosPreparation(DataProvider):
 
     def execute(self, rawData: LoadedData, test_ids: List[str], data_selector: DataSelector) -> Data:
         rawData = copy.deepcopy(rawData)
-        tagged_sentences: List[Tuple[str, List[Tuple[str, str]]]] = list()
+        tagged_sentences: List[Tuple[str, List[Tuple[str, str]], List[Tuple[str, str]]]] = list()
+        pos_tags: List[Tuple[str, str]]
 
         x_train = []
         y_train: List[str] = []
@@ -21,6 +23,7 @@ class PosPreparation(DataProvider):
 
         for dataKey, dataValue in rawData.items():
             tokens: List[str] = dataValue.get("tokens")
+            pos_tags = pos_tagger(tokens)
             for reviewKey, dataData in dataValue.items():
                 if reviewKey == "tokens":
                     continue
@@ -28,16 +31,15 @@ class PosPreparation(DataProvider):
                 sentence = list()
                 for index, token in enumerate(tokens):
                     sentence.append((token, data_selector.type_symbol if labels[index].endswith(data_selector.type_symbol) else "O"))
-                tagged_sentences.append((dataKey, sentence))
+                tagged_sentences.append((dataKey, sentence, pos_tags))
 
-        for group in tagged_sentences:
-            tagged = group[1]
+        for group, tagged, pos_tags in tagged_sentences:
             for index in range(len(tagged)):
 
-                features = extract_features(extract_word(tagged), index)
+                features = extract_features(extract_word(tagged), index, pos_tags)
                 label = tagged[index][1]
 
-                if group[0] in test_ids:
+                if group in test_ids:
                     x_test.append(features)
                     y_test.append(label)
                 else:
@@ -47,15 +49,12 @@ class PosPreparation(DataProvider):
         return PosData(x_train, y_train, x_test, y_test)
 
 
-def extract_features(sentence, index):
+def extract_features(sentence, index, pos_tags):
     """ sentence: [w1, w2, ...], index: the index of the word """
     return {
         'word': sentence[index],
         'is_first': index == 0,
         'is_last': index == len(sentence) - 1,
-        'is_capitalized': sentence[index][0].upper() == sentence[index][0],
-        'is_all_caps': sentence[index].upper() == sentence[index],
-        'is_all_lower': sentence[index].lower() == sentence[index],
         'prefix-1': sentence[index][0],
         'prefix-2': sentence[index][:2],
         'prefix-3': sentence[index][:3],
@@ -66,7 +65,8 @@ def extract_features(sentence, index):
         'next_word': '' if index == len(sentence) - 1 else sentence[index + 1],
         'has_hyphen': '-' in sentence[index],
         'is_numeric': sentence[index].isdigit(),
-        'capitals_inside': sentence[index][1:].lower() != sentence[index][1:]
+        'length': len(sentence[index]),
+        'POS_tag': pos_tags[index][1]
     }
 
 

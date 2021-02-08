@@ -7,8 +7,8 @@ from utils.Vectorizer import Vectorizer
 class PosDataDictVectorizer(Vectorizer):
 
     def __init__(self):
-        super().__init__(#"pos_data",
-                         "dfData"
+        super().__init__("pos_data",
+                         #"dfData"
                          )
 
     def vectorize(self, data: Data) -> DictVecPosData:
