@@ -1,6 +1,7 @@
 from typing import List, Dict, Tuple
 import pandas as pd
 from loading.LoadingUtils import LoadedData
+from loading.Preprocessing import isStopWord
 from utils.Data import CountVecInputData
 from utils.DataProvider import DataProvider
 import copy
@@ -15,6 +16,8 @@ class CountVecDataPreparation(DataProvider):
         rawData = copy.deepcopy(rawData)
 
         tagged_sentences: List[Tuple[str, List[Tuple[str, str]]]] = list()
+        stoppedTestLabels = dict()
+        stopWordLabel = "O"
 
         x_train = []
         y_train: List[str] = []
@@ -46,6 +49,8 @@ class CountVecDataPreparation(DataProvider):
                 if group[0] in test_ids:
                     x_test.append(token)
                     y_test.append(label)
+                    if isStopWord(token):
+                        stoppedTestLabels.setdefault(len(y_test)-1, stopWordLabel)
                 else:
                     x_train.append(token)
                     y_train.append(label)
@@ -67,4 +72,4 @@ class CountVecDataPreparation(DataProvider):
             dfs.to_csv("WordCount.csv", index=False)
             dfi.to_csv("WordIndex.csv", index=False)"""
 
-        return CountVecInputData(x_train, y_train, x_test, y_test, index_vocabulary)
+        return CountVecInputData(x_train, y_train, x_test, y_test, index_vocabulary, stoppedTestLabels)

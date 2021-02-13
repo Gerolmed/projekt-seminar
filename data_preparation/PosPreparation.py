@@ -2,7 +2,7 @@ import copy
 from typing import List, Tuple
 
 from loading.LoadingUtils import LoadedData
-from loading.Preprocessing import pos_tagger
+from loading.Preprocessing import pos_tagger, isStopWord
 from utils.Data import Data, PosData
 from utils.DataProvider import DataProvider
 from utils.DataSelector import DataSelector
@@ -15,6 +15,9 @@ class PosPreparation(DataProvider):
         rawData = copy.deepcopy(rawData)
         tagged_sentences: List[Tuple[str, List[Tuple[str, str]], List[Tuple[str, str]]]] = list()
         pos_tags: List[Tuple[str, str]]
+
+        stoppedTestLabels = dict()
+        stopWordLabel = "O"
 
         x_train = []
         y_train: List[str] = []
@@ -38,17 +41,20 @@ class PosPreparation(DataProvider):
         for group, tagged, pos_tags in tagged_sentences:
             for index in range(len(tagged)):
 
+                token = extract_word(tagged)[index]
                 features = extract_features(extract_word(tagged), index, pos_tags)
                 label = tagged[index][1]
 
                 if group in test_ids:
                     x_test.append(features)
                     y_test.append(label)
+                    if isStopWord(token):
+                        stoppedTestLabels.setdefault(len(y_test)-1, stopWordLabel)
                 else:
                     x_train.append(features)
                     y_train.append(label)
 
-        return PosData(x_train, y_train, x_test, y_test)
+        return PosData(x_train, y_train, x_test, y_test, stoppedTestLabels)
 
 
 def extract_features(sentence, index, pos_tags):

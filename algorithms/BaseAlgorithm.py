@@ -28,6 +28,9 @@ class BaseAlgorithm(Algorithm):
         [_, train_delta] = self.train(clf, data.train_data, data.train_labels)
         [pred_labels, test_delta] = self.test(clf, data.test_data)
 
+        for index, label in data.stoppedTestLabels.items():
+            pred_labels[index] = label
+
         precision = precision_score(data.test_labels, pred_labels, average="micro")
         recall = recall_score(data.test_labels, pred_labels, average="micro")
         f1 = f1_score(data.test_labels, pred_labels, average="micro")

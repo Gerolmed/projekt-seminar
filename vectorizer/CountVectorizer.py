@@ -14,4 +14,4 @@ class CountVec(Vectorizer):
         x_train = vectorizer.fit_transform(data.train_data)
         x_test = vectorizer.transform(data.test_data)
 
-        return CountVecData(x_train, data.train_labels, x_test, data.test_labels)
+        return CountVecData(x_train, data.train_labels, x_test, data.test_labels, data.stoppedTestLabels)

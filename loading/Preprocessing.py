@@ -30,7 +30,7 @@ def removeStopWords(data: RawData, test_data_ids: List[str]):
         remove_index = list()
         tokens = v.get('tokens')
         for index, token in enumerate(tokens):
-            if token in list(stopWords):
+            if isStopWord(token):
                 remove_index.append(index)
         if len(remove_index) == 0:
             continue
@@ -41,6 +41,10 @@ def removeStopWords(data: RawData, test_data_ids: List[str]):
             for label_type, rating in val.items():
                 data[k][key][label_type] = short_array(rating, remove_index)
     return data
+
+
+def isStopWord(token):
+    return token in list(stopWords)
 
 
 def stemming(data: RawData):

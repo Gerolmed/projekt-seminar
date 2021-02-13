@@ -1,6 +1,6 @@
 from sklearn.feature_extraction import DictVectorizer
 
-from utils.Data import Data, DictVecPosData
+from utils.Data import Data, DictVecPosData, PosData
 from utils.Vectorizer import Vectorizer
 
 
@@ -11,9 +11,9 @@ class PosDataDictVectorizer(Vectorizer):
                          #"dfData"
                          )
 
-    def vectorize(self, data: Data) -> DictVecPosData:
+    def vectorize(self, data: PosData) -> DictVecPosData:
         vectorizer = DictVectorizer(sparse=False)
         x_train = vectorizer.fit_transform(data.train_data)
         x_test = vectorizer.transform(data.test_data)
 
-        return DictVecPosData(x_train, data.train_labels, x_test, data.test_labels)
+        return DictVecPosData(x_train, data.train_labels, x_test, data.test_labels, data.stoppedTestLabels)
