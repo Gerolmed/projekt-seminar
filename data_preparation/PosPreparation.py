@@ -11,6 +11,7 @@ from utils.DataSelector import DataSelector
 class PosPreparation(DataProvider):
 
     def execute(self, rawData: LoadedData, test_ids: List[str], data_selector: DataSelector) -> Data:
+        includePOStags = False
         rawData = copy.deepcopy(rawData)
         tagged_sentences: List[Tuple[str, List[Tuple[str, str]], List[Tuple[str, str]]]] = list()
         pos_tags: List[Tuple[str, str]]
@@ -23,7 +24,8 @@ class PosPreparation(DataProvider):
 
         for dataKey, dataValue in rawData.items():
             tokens: List[str] = dataValue.get("tokens")
-            pos_tags = pos_tagger(tokens)
+            pos_tags = pos_tagger(tokens) if includePOStags else [("", "") for _ in tokens]
+
             for reviewKey, dataData in dataValue.items():
                 if reviewKey == "tokens":
                     continue
@@ -66,7 +68,7 @@ def extract_features(sentence, index, pos_tags):
         'has_hyphen': '-' in sentence[index],
         'is_numeric': sentence[index].isdigit(),
         'length': len(sentence[index]),
-        'POS_tag': pos_tags[index][1]
+        #'POS_tag': pos_tags[index][1]
     }
 
 

@@ -1,5 +1,5 @@
 from typing import List, Dict, Tuple
-
+import pandas as pd
 from loading.LoadingUtils import LoadedData
 from utils.Data import CountVecInputData
 from utils.DataProvider import DataProvider
@@ -49,7 +49,7 @@ class CountVecDataPreparation(DataProvider):
                 else:
                     x_train.append(token)
                     y_train.append(label)
-                    if label.endswith("S"):
+                    if label.endswith(data_selector.type_symbol):
                         vocabulary[token] += 1
 
         sorted_vocabulary = {}
@@ -61,6 +61,10 @@ class CountVecDataPreparation(DataProvider):
         for index, key in enumerate(sorted_vocabulary):
             index_vocabulary[key] = index
 
-        # print(y_train)
+        """if data_selector.type_symbol == "S":
+            dfs = pd.DataFrame({"Tokens": sorted_vocabulary.keys(), "Count": sorted_vocabulary.values()})
+            dfi = pd.DataFrame({"Tokens": index_vocabulary.keys(), "Index": index_vocabulary.values()})
+            dfs.to_csv("WordCount.csv", index=False)
+            dfi.to_csv("WordIndex.csv", index=False)"""
 
         return CountVecInputData(x_train, y_train, x_test, y_test, index_vocabulary)

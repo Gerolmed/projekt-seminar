@@ -1,10 +1,10 @@
 import copy
 from typing import List, Dict, Tuple
-
+import pandas as pd
 from algorithms.LogisticReg import LogisticReg
 from algorithms.ComparisonClassifier import ComparisonClassifier
 from algorithms.DecisionTrees import DecisionTrees
-from algorithms.MLP import MultiLayerPerceptron
+from algorithms.Perceptron import LinearPerceptron
 from algorithms.NaiveBayes import MultinomialNaiveBayes
 from algorithms.KNN import KNearestNeighbor
 from algorithms.SVM import SupportVectorMachine
@@ -22,6 +22,15 @@ from utils.Vectorizer import Vectorizer
 from vectorizer.CountVectorizer import CountVec
 from vectorizer.PosDataDictVectorizer import PosDataDictVectorizer
 
+__scores = {"classifier": [],
+            "label": [],
+            "data": [],
+            "runtime": [],
+            "precision": [],
+            "recall": [],
+            "f_measure": [],
+            }
+
 data_selectors: List[DataSelector] = [
     DataSelector("sentiments", "S"),
     DataSelector("aspects", "A"),
@@ -29,27 +38,27 @@ data_selectors: List[DataSelector] = [
 ]
 
 data_providers: List[DataProvider] = [
-    # ComparisonDataPreparation(),
+    ComparisonDataPreparation(),
     PosPreparation(),
-    # CountVecDataPreparation(),
+    CountVecDataPreparation(),
     # DataFramePreparation()
 ]
 """Prepares data for vectorizer (or directly for algorithm)"""
 
 vectorizers: List[Vectorizer] = [
     PosDataDictVectorizer(),
-    # CountVec(),
+    CountVec(),
 ]
 """The vectorizers to add vectorized data based on prepared data"""
 
 algorithms: List[Algorithm] = [
     # ComparisonClassifier(),
-    # MultinomialNaiveBayes(),
+    MultinomialNaiveBayes(),
     # SupportVectorMachine(),
     # DecisionTrees(),
     # KNearestNeighbor(),
     # LogisticReg(),
-    MultiLayerPerceptron()
+    # LinearPerceptron()
 ]
 """The Algorithms to use"""
 
@@ -85,6 +94,7 @@ def run_pipeline(data_selector: DataSelector):
 
             print(f"Executing {algorithm.get_name()} with {selected_data.data_type} ({data_selector.type_name})...")
             result = algorithm.execute(selected_data)
+
             print(f"Finished executing {algorithm.get_name()} in {round((result.train_time + result.test_time), 3)} "
                   f"sec ({round((result.train_time + result.test_time) / 60, 3)} min)!")
 
@@ -99,6 +109,15 @@ def print_results(data_selector: DataSelector, results: List[Result]):
 
     # Prints all results in a fixed format after execution
     for result in results:
+        append_scores({"classifier": [result.algorithm_name],
+                       "label": [data_selector.type_name],
+                       "data": [result.data_name],
+                       "runtime": [(result.train_time + result.test_time)],
+                       "precision": [result.precision],
+                       "recall": [result.recall],
+                       "f_measure": [result.f1],
+                       })
+
         print("============================================")
         print(f"Name: {result.algorithm_name}")
         print(f"Data: {result.data_name}")
@@ -119,8 +138,8 @@ def print_results(data_selector: DataSelector, results: List[Result]):
 # Result combination
 # #################################
 
-def combine_results(total_results: Dict[DataSelector, List[Result]], index=0, previous: List[List[Tuple[DataSelector, Result]]] = []) -> List[List[Tuple[DataSelector, Result]]]:
-
+def combine_results(total_results: Dict[DataSelector, List[Result]], index=0,
+                    previous: List[List[Tuple[DataSelector, Result]]] = []) -> List[List[Tuple[DataSelector, Result]]]:
     if len(total_results.items()) <= index:
         return previous
 
@@ -161,6 +180,11 @@ def print_combination(combination: List[Tuple[DataSelector, Result]], f1_score: 
     pass
 
 
+def append_scores(new_scores: dict):
+    for key, value in new_scores.items():
+        __scores[key].append(value)
+
+
 def main():
     total_results: Dict[DataSelector, List[Result]] = dict()
     for data_selector in data_selectors:
@@ -182,6 +206,9 @@ def main():
         f1_score /= len(combination)
 
         print_combination(combination, f1_score)
+
+    """df = pd.DataFrame(__scores)
+    df.to_csv("scores.csv", index=False)"""
 
 
 main()

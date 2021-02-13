@@ -2,7 +2,7 @@ from algorithms.BaseAlgorithm import BaseAlgorithm
 from sklearn.linear_model import Perceptron
 
 
-class MultiLayerPerceptron(BaseAlgorithm):
+class LinearPerceptron(BaseAlgorithm):
 
     def __init__(self):
         super().__init__("Linear Perceptron", [# "count_vec_data",

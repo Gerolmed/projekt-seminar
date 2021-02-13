@@ -27,7 +27,7 @@ class LoadingUtils:
             raw_data[k]['tokens'] = tokens
 
         # remove Stopwords
-        # raw_data: RawData = removeStopWords(raw_data, test_ids)
+        raw_data: RawData = removeStopWords(raw_data, test_ids)
 
         # raw_data: RawData = stemming(raw_data)
 

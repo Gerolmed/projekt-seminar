@@ -6,7 +6,7 @@ from utils.Algorithm import Algorithm
 from utils.Data import PosData
 from utils.Delta import delta
 from utils.Result import Result
-
+import pandas as pd
 
 class BaseAlgorithm(Algorithm):
     def __init__(self, name: str, supported_types: List[str]):
@@ -28,9 +28,9 @@ class BaseAlgorithm(Algorithm):
         [_, train_delta] = self.train(clf, data.train_data, data.train_labels)
         [pred_labels, test_delta] = self.test(clf, data.test_data)
 
-        precision = precision_score(data.test_labels, pred_labels, average="macro")
-        recall = recall_score(data.test_labels, pred_labels, average="macro")
-        f1 = f1_score(data.test_labels, pred_labels, average="macro")
+        precision = precision_score(data.test_labels, pred_labels, average="micro")
+        recall = recall_score(data.test_labels, pred_labels, average="micro")
+        f1 = f1_score(data.test_labels, pred_labels, average="micro")
         conf_matrix = confusion_matrix(data.test_labels, pred_labels)
 
         return Result(precision, recall, f1, conf_matrix, self.get_name(), data.data_type, round(train_delta, 3), round(test_delta, 3))
