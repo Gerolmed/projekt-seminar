@@ -5,9 +5,15 @@ import pandas as pd
 
 RawData = Dict[str, Dict[str, Union[Dict[str, List[str]], List[str]]]]
 
-stopWords = list(stopwords.words('english'))
-stopWords.extend([".", ",", "!", "(", ")", '"', "-", "'", ":", ";", "?", "=", "<", ">", "https", "div", "&", "/", "*",
-                  "[", "]"])
+stopWords = ["you've", "yourselves", "yourself", "yours", "you're", "your", "you'll", "you'd", "you", "y", "why",
+             "whom", "who", "while", "which", "where", "when", "until", "through", "those", "they", "these", "there",
+             "then", "themselves", "them", "theirs", "their", "that'll", "t", "she's", "she", "s", "re", "own",
+             "ourselves", "ours", "our", "o", "now", "me", "ma", "m", "ll", "itself", "into", "if", "how", "his",
+             "himself", "him", "herself", "hers", "here", "her", "he", "further", "from", "each", "during", "doing",
+             "d", "both", "between", "being", "before", "because", "are", "an", "am", "ain", "against", ".",
+             ",", "!", "(", ")", '"', "-", "'", ":", ";", "?", "=", "<", ">", "https", "div", "&", "/", "*",
+             "[", "]"
+             ]
 
 ps = PorterStemmer()
 lemmatizer = WordNetLemmatizer()

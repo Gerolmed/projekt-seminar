@@ -5,7 +5,7 @@ from algorithms.BaseAlgorithm import BaseAlgorithm
 class MultinomialNaiveBayes(BaseAlgorithm):
 
     def __init__(self):
-        super().__init__("Multinomial Naive Bayes", ["count_vec_data",
+        super().__init__("Multinomial Naive Bayes", [#"count_vec_data",
                                                      "dict_vec_pos_data"])
 
     def construct_classifier(self):

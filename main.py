@@ -54,10 +54,10 @@ vectorizers: List[Vectorizer] = [
 algorithms: List[Algorithm] = [
     # ComparisonClassifier(),
     MultinomialNaiveBayes(),
-    # SupportVectorMachine(),
+    SupportVectorMachine(),
     # DecisionTrees(),
     # KNearestNeighbor(),
-    # LogisticReg(),
+    LogisticReg(),
     # LinearPerceptron()
 ]
 """The Algorithms to use"""
