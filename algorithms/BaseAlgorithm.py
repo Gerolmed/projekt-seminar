@@ -31,9 +31,9 @@ class BaseAlgorithm(Algorithm):
         for index, label in data.stoppedTestLabels.items():
             pred_labels[index] = label
 
-        precision = precision_score(data.test_labels, pred_labels, average="macro")
-        recall = recall_score(data.test_labels, pred_labels, average="macro")
-        f1 = f1_score(data.test_labels, pred_labels, average="macro")
+        precision = precision_score(data.test_labels, pred_labels, average='macro')
+        recall = recall_score(data.test_labels, pred_labels, average='macro')
+        f1 = f1_score(data.test_labels, pred_labels, average='macro')
         conf_matrix = confusion_matrix(data.test_labels, pred_labels)
 
         return Result(precision, recall, f1, conf_matrix, self.get_name(), data.data_type, round(train_delta, 3), round(test_delta, 3))

@@ -17,9 +17,6 @@ class DataFramePreparation(DataProvider):
         # dataFrame = dataToDataFrame(rawData, test_ids)
         # dataFrameToCSV(dataFrame)
 
-        # Add TestIDs to already existing CSV-file (not necessary anymore, because they now get implemented, too)
-        # addTestIDs(raw_data, test_ids, "./Data.csv")
-
         train_data = dataFrame.loc[dataFrame["inTestIDs"] == bool(False)].drop(["SentenceNr", "inTestIDs"], axis=1)
         test_data = dataFrame.loc[dataFrame["inTestIDs"] == bool(True)].drop(["SentenceNr", "inTestIDs"], axis=1)
 

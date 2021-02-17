@@ -41,7 +41,7 @@ data_providers: List[DataProvider] = [
     ComparisonDataPreparation(),
     PosPreparation(),
     CountVecDataPreparation(),
-    # DataFramePreparation()
+    DataFramePreparation()
 ]
 """Prepares data for vectorizer (or directly for algorithm)"""
 
@@ -54,10 +54,10 @@ vectorizers: List[Vectorizer] = [
 algorithms: List[Algorithm] = [
     # ComparisonClassifier(),
     MultinomialNaiveBayes(),
-    SupportVectorMachine(),
+    # SupportVectorMachine(),
     # DecisionTrees(),
     # KNearestNeighbor(),
-    LogisticReg(),
+    # LogisticReg(),
     # LinearPerceptron()
 ]
 """The Algorithms to use"""
