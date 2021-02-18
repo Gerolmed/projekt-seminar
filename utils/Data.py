@@ -26,10 +26,10 @@ class BasicData(Data):
         self.n_tags = n_tags
 
 
-class PosData(Data):
+class FeatureSetData(Data):
     def __init__(self, train_data: List[Dict[str, bool]], train_labels: List[str], test_data: List[Dict[str, bool]],
                  test_labels: List[str], stoppedTestLabels: Dict[int, str]):
-        super().__init__("pos_data")
+        super().__init__("feature_set_data")
         self.train_data = train_data
         self.train_labels = train_labels
         self.test_data = test_data
@@ -37,10 +37,10 @@ class PosData(Data):
         self.stoppedTestLabels = stoppedTestLabels
 
 
-class DictVecPosData(Data):
+class DictVecFeatureSetData(Data):
     def __init__(self, train_data: List[Dict[str, Any]], train_labels: List[str], test_data: List[Dict[str, Any]],
                  test_labels: List[str], stoppedTestLabels: Dict[int, str]):
-        super().__init__("dict_vec_pos_data")
+        super().__init__("dict_vec_feature_set_data")
         self.train_data = train_data
         self.train_labels = train_labels
         self.test_data = test_data

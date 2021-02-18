@@ -1,19 +1,20 @@
 import copy
+import os
 from typing import List, Dict, Tuple
 import pandas as pd
-from algorithms.LogisticReg import LogisticReg
-from algorithms.ComparisonClassifier import ComparisonClassifier
-from algorithms.DecisionTrees import DecisionTrees
-from algorithms.Perceptron import LinearPerceptron
-from algorithms.NaiveBayes import MultinomialNaiveBayes
-from algorithms.KNN import KNearestNeighbor
-from algorithms.SVM import SupportVectorMachine
+from classifier.LogisticReg import LogisticReg
+from classifier.ComparisonClassifier import ComparisonClassifier
+from classifier.DecisionTrees import DecisionTrees
+from classifier.Perceptron import LinearPerceptron
+from classifier.NaiveBayes import MultinomialNaiveBayes
+from classifier.KNN import KNearestNeighbor
+from classifier.SVM import SupportVectorMachine
 from data_preparation.ComparisonDataPreparation import ComparisonDataPreparation
 from data_preparation.CountVecDataPreparation import CountVecDataPreparation
 from data_preparation.DataFramePreparation import DataFramePreparation
-from data_preparation.PosPreparation import PosPreparation
+from data_preparation.FeatureSetPreparation import FeatureSetPreparation
 from loading.LoadingUtils import LoadingUtils
-from utils.Algorithm import Algorithm
+from utils.Classifier import Classifier
 from utils.Data import Data
 from utils.DataProvider import DataProvider
 from utils.DataSelector import DataSelector
@@ -22,14 +23,20 @@ from utils.Vectorizer import Vectorizer
 from vectorizer.CountVectorizer import CountVec
 from vectorizer.PosDataDictVectorizer import PosDataDictVectorizer
 
-__scores = {"classifier": [],
-            "label": [],
-            "data": [],
-            "runtime": [],
-            "precision": [],
-            "recall": [],
-            "f_measure": [],
-            }
+# Create dictionary to save evaluation scores to
+
+__scores: Dict = {"classifier": [],
+                  "label": [],
+                  "data": [],
+                  "runtime": [],
+                  "precision": [],
+                  "recall": [],
+                  "f_measure": [],
+                  }
+
+# #################################
+# Label selection
+# #################################
 
 data_selectors: List[DataSelector] = [
     DataSelector("sentiments", "S"),
@@ -37,13 +44,21 @@ data_selectors: List[DataSelector] = [
     DataSelector("modifiers", "M")
 ]
 
+# #################################
+# Data provider selection
+# #################################
+
 data_providers: List[DataProvider] = [
     ComparisonDataPreparation(),
-    PosPreparation(),
+    FeatureSetPreparation(),
     CountVecDataPreparation(),
     DataFramePreparation()
 ]
 """Prepares data for vectorizer (or directly for algorithm)"""
+
+# #################################
+# Vectorizer selection
+# #################################
 
 vectorizers: List[Vectorizer] = [
     PosDataDictVectorizer(),
@@ -51,17 +66,25 @@ vectorizers: List[Vectorizer] = [
 ]
 """The vectorizers to add vectorized data based on prepared data"""
 
-algorithms: List[Algorithm] = [
-    # ComparisonClassifier(),
+# #################################
+# Classifier selection
+# #################################
+
+classifier: List[Classifier] = [
+    ComparisonClassifier(),
     MultinomialNaiveBayes(),
-    # SupportVectorMachine(),
-    # DecisionTrees(),
-    # KNearestNeighbor(),
-    # LogisticReg(),
-    # LinearPerceptron()
+    SupportVectorMachine(),
+    DecisionTrees(),
+    KNearestNeighbor(),
+    LogisticReg(),
+    LinearPerceptron()
 ]
 """The Algorithms to use"""
 
+
+# ##################################################################
+# Pipeline: loading | preparation | vectorization | classification
+# ##################################################################
 
 def run_pipeline(data_selector: DataSelector):
     data_dict: Dict[str, Data] = dict()
@@ -81,10 +104,10 @@ def run_pipeline(data_selector: DataSelector):
         data_dict.setdefault(data.data_type, data)
 
     results: List[Result] = []
-    """Collects the results of the different algorithms for further usages"""
+    """Collects the results of the different classifier for further usages"""
 
     # Run and execute every algorithm
-    for algorithm in algorithms:
+    for algorithm in classifier:
         for data_type in algorithm.get_supported_data_types():
             selected_data = data_dict.get(data_type)
 
@@ -101,6 +124,10 @@ def run_pipeline(data_selector: DataSelector):
             results.append(result)
     return results
 
+
+# #################################
+# Results for each Label
+# #################################
 
 def print_results(data_selector: DataSelector, results: List[Result]):
     print("============================================")
@@ -158,10 +185,6 @@ def combine_results(total_results: Dict[DataSelector, List[Result]], index=0,
     return combine_results(total_results, index + 1, out_list)
 
 
-# #################################
-# Main Run
-# #################################
-
 def print_combination(combination: List[Tuple[DataSelector, Result]], f1_score: float):
     used_text: str = "Used: "
     calc_text: str = "("
@@ -180,10 +203,36 @@ def print_combination(combination: List[Tuple[DataSelector, Result]], f1_score: 
     pass
 
 
+# #################################
+# Output evaluation scores to csv-file
+# #################################
+
 def append_scores(new_scores: dict):
     for key, value in new_scores.items():
         __scores[key].append(value)
 
+
+def output_scores():
+    if os.path.exists("./scores.csv"):
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print("File scores.csv already exists")
+        print("Please move the existing file to the archive")
+        user_input = input("If you want to save the current scores to a temporary file enter <<  s  >>"
+                           "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        if user_input == "s":
+            df = pd.DataFrame(__scores)
+            df.to_csv("temp_scores.csv", index=False)
+            print("scores saved successfully")
+        else:
+            print("cached scores are being deleted")
+    else:
+        df = pd.DataFrame(__scores)
+        df.to_csv("scores.csv", index=False)
+
+
+# #################################
+# Main Run
+# #################################
 
 def main():
     total_results: Dict[DataSelector, List[Result]] = dict()
@@ -207,8 +256,7 @@ def main():
 
         print_combination(combination, f1_score)
 
-    """df = pd.DataFrame(__scores)
-    df.to_csv("scores.csv", index=False)"""
+    output_scores()
 
 
 main()

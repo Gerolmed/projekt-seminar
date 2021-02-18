@@ -5,6 +5,7 @@ from loading.Preprocessing import isStopWord
 from utils.Data import CountVecInputData
 from utils.DataProvider import DataProvider
 import copy
+import os
 
 from utils.DataSelector import DataSelector
 
@@ -35,7 +36,8 @@ class CountVecDataPreparation(DataProvider):
                 labels = dataData[data_selector.type_name]  # todo add _uncertainty as well
                 sentence = list()
                 for index, token in enumerate(tokens):
-                    sentence.append((token, data_selector.type_symbol if labels[index].endswith(data_selector.type_symbol) else "O"))
+                    sentence.append((token, data_selector.type_symbol if labels[index].endswith(
+                        data_selector.type_symbol) else "O"))
                     vocabulary.setdefault(token, 0)
                 tagged_sentences.append((dataKey, sentence))
 
@@ -50,7 +52,7 @@ class CountVecDataPreparation(DataProvider):
                     x_test.append(token)
                     y_test.append(label)
                     if isStopWord(token):
-                        stoppedTestLabels.setdefault(len(y_test)-1, stopWordLabel)
+                        stoppedTestLabels.setdefault(len(y_test) - 1, stopWordLabel)
                 else:
                     x_train.append(token)
                     y_train.append(label)
@@ -66,10 +68,16 @@ class CountVecDataPreparation(DataProvider):
         for index, key in enumerate(sorted_vocabulary):
             index_vocabulary[key] = index
 
-        """if data_selector.type_symbol == "S":
+        if os.path.isfile(f'./Vocabularies/WordCount{data_selector.type_symbol}.csv'):
+            pass
+        else:
             dfs = pd.DataFrame({"Tokens": sorted_vocabulary.keys(), "Count": sorted_vocabulary.values()})
+            dfs.to_csv(f"./Vocabularies/WordCount{data_selector.type_symbol}.csv", index=False)
+
+        if os.path.isfile(f'./Vocabularies/WordIndex{data_selector.type_symbol}.csv'):
+            pass
+        else:
             dfi = pd.DataFrame({"Tokens": index_vocabulary.keys(), "Index": index_vocabulary.values()})
-            dfs.to_csv("WordCount.csv", index=False)
-            dfi.to_csv("WordIndex.csv", index=False)"""
+            dfi.to_csv(f"./Vocabularies/WordIndex{data_selector.type_symbol}.csv", index=False)
 
         return CountVecInputData(x_train, y_train, x_test, y_test, index_vocabulary, stoppedTestLabels)
