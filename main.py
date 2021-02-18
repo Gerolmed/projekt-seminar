@@ -5,6 +5,7 @@ import pandas as pd
 from classifier.LogisticReg import LogisticReg
 from classifier.ComparisonClassifier import ComparisonClassifier
 from classifier.DecisionTrees import DecisionTrees
+from classifier.RandomForest import RandomForest
 from classifier.Perceptron import LinearPerceptron
 from classifier.NaiveBayes import MultinomialNaiveBayes
 from classifier.KNN import KNearestNeighbor
@@ -71,13 +72,14 @@ vectorizers: List[Vectorizer] = [
 # #################################
 
 classifier: List[Classifier] = [
-    ComparisonClassifier(),
-    MultinomialNaiveBayes(),
-    SupportVectorMachine(),
-    DecisionTrees(),
-    KNearestNeighbor(),
-    LogisticReg(),
-    LinearPerceptron()
+    # ComparisonClassifier(),
+    # MultinomialNaiveBayes(),
+    # SupportVectorMachine(),
+    # DecisionTrees(),
+    # RandomForest(),
+    # KNearestNeighbor(),
+    # LogisticReg(),
+    # LinearPerceptron()
 ]
 """The Algorithms to use"""
 
@@ -218,7 +220,7 @@ def output_scores():
         print("File scores.csv already exists")
         print("Please move the existing file to the archive")
         user_input = input("If you want to save the current scores to a temporary file enter <<  s  >>"
-                           "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                           "\nElse enter any other key\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         if user_input == "s":
             df = pd.DataFrame(__scores)
             df.to_csv("temp_scores.csv", index=False)
