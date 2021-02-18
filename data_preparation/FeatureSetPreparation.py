@@ -64,9 +64,11 @@ def extract_features(token, labels, index, pos_tags):
         'word': token[index],
         'prev_label': '' if index == 0 else labels[index - 1],
         'next_label': '' if index == len(token) - 1 else labels[index + 1],
-        'is_numeric': token[index].isdigit(),
+        'contains_number': any(char.isdigit() for char in token[index]),
         'length': len(token[index]),
-        'POS_tag': pos_tags[index][1]
+        'prev_POS_tag': '' if index == 0 else pos_tags[index - 1][1],
+        'POS_tag': pos_tags[index][1],
+        'next_POS_tag': '' if index == len(token) - 1 else pos_tags[index + 1][1]
     }
 
 
