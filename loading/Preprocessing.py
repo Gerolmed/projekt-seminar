@@ -5,9 +5,15 @@ import pandas as pd
 
 RawData = Dict[str, Dict[str, Union[Dict[str, List[str]], List[str]]]]
 
-stopWords = list(stopwords.words('english'))
-stopWords.extend([".", ",", "!", "(", ")", '"', "-", "'", ":", ";", "?", "=", "<", ">", "https", "div", "&", "/", "*",
-                  "[", "]"])
+stopWords = ["you've", "yourselves", "yourself", "yours", "you're", "your", "you'll", "you'd", "you", "y", "why",
+             "whom", "who", "while", "which", "where", "when", "until", "through", "those", "they", "these", "there",
+             "then", "themselves", "them", "theirs", "their", "that'll", "t", "she's", "she", "s", "re", "own",
+             "ourselves", "ours", "our", "o", "now", "me", "ma", "m", "ll", "itself", "into", "if", "how", "his",
+             "himself", "him", "herself", "hers", "here", "her", "he", "further", "from", "each", "during", "doing",
+             "d", "both", "between", "being", "before", "because", "are", "an", "am", "ain", "against", ".",
+             ",", "!", "(", ")", '"', "-", "'", ":", ";", "?", "=", "<", ">", "https", "div", "&", "/", "*",
+             "[", "]"
+             ]
 
 ps = PorterStemmer()
 lemmatizer = WordNetLemmatizer()
@@ -30,7 +36,7 @@ def removeStopWords(data: RawData, test_data_ids: List[str]):
         remove_index = list()
         tokens = v.get('tokens')
         for index, token in enumerate(tokens):
-            if token in list(stopWords):
+            if isStopWord(token):
                 remove_index.append(index)
         if len(remove_index) == 0:
             continue
@@ -41,6 +47,10 @@ def removeStopWords(data: RawData, test_data_ids: List[str]):
             for label_type, rating in val.items():
                 data[k][key][label_type] = short_array(rating, remove_index)
     return data
+
+
+def isStopWord(token):
+    return token in list(stopWords)
 
 
 def stemming(data: RawData):

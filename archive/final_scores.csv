@@ -1,0 +1,13 @@
+classifier,label,data,runtime,precision,recall,f_measure
+['Linear Support Vector Machine'],['sentiments'],['dict_vec_feature_set_data'],[234.013],[0.8653096954276842],[0.8038101628494159],[0.830926995294952]
+['Decision Trees'],['sentiments'],['dict_vec_feature_set_data'],[98.22],[0.8614675755821015],[0.7724299986926684],[0.8089724003600276]
+['Logistic Regression'],['sentiments'],['dict_vec_feature_set_data'],[3.0740000000000003],[0.8780124727238765],[0.7664758671310057],[0.8100752202804647]
+['Linear Perceptron'],['sentiments'],['dict_vec_feature_set_data'],[16.532],[0.6389611379345974],[0.8462967311984451],[0.648075499538153]
+['Linear Support Vector Machine'],['aspects'],['dict_vec_feature_set_data'],[220.764],[0.8739038594922299],[0.7482854334500808],[0.7956822065768877]
+['Decision Trees'],['aspects'],['dict_vec_feature_set_data'],[57.77],[0.8263469325270836],[0.7763349612102219],[0.7987325977635839]
+['Logistic Regression'],['aspects'],['dict_vec_feature_set_data'],[3.084],[0.8824661473871326],[0.7366129977668545],[0.7888031943589056]
+['Linear Perceptron'],['aspects'],['dict_vec_feature_set_data'],[11.447],[0.6627416959026042],[0.85797429003062],[0.6999162684484198]
+['Linear Support Vector Machine'],['modifiers'],['dict_vec_feature_set_data'],[54.48800000000001],[0.8625933637442149],[0.694965664243171],[0.7518817825246809]
+['Decision Trees'],['modifiers'],['dict_vec_feature_set_data'],[197.746],[0.7788232354319473],[0.7287542753700039],[0.7510989053545728]
+['Logistic Regression'],['modifiers'],['dict_vec_feature_set_data'],[2.824],[0.8545324557305171],[0.6897254568164046],[0.7454701104744399]
+['Linear Perceptron'],['modifiers'],['dict_vec_feature_set_data'],[11.823],[0.7887442254887689],[0.7491918399023787],[0.7673855857855425]
