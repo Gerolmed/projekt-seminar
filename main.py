@@ -52,7 +52,7 @@ data_selectors: List[DataSelector] = [
 data_providers: List[DataProvider] = [
     ComparisonDataPreparation(),
     FeatureSetPreparation(),
-    # CountVecDataPreparation(),
+    CountVecDataPreparation(),
     DataFramePreparation()
 ]
 """Prepares data for vectorizer (or directly for algorithm)"""
@@ -63,7 +63,7 @@ data_providers: List[DataProvider] = [
 
 vectorizers: List[Vectorizer] = [
     PosDataDictVectorizer(),
-    # CountVec(),
+    CountVec(),
 ]
 """The vectorizers to add vectorized data based on prepared data"""
 
