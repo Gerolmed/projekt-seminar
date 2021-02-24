@@ -9,7 +9,8 @@ import pandas as pd
 
 
 class ComparisonClassifier(Classifier):
-    """Classifier handed out with the project task"""
+    """Classifier handed out with the project task. This code was mostly modified to fit data and structure of the
+     pipeline"""
     def get_name(self) -> str:
         return "type_1"
 

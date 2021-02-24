@@ -28,6 +28,7 @@ class CountVecDataPreparation(DataProvider):
 
         vocabulary: Dict[str, int] = {}
 
+        # Extract words
         for dataKey, dataValue in rawData.items():
             tokens: List[str] = dataValue.get("tokens")
             for reviewKey, dataData in dataValue.items():
@@ -41,6 +42,7 @@ class CountVecDataPreparation(DataProvider):
                     vocabulary.setdefault(token, 0)
                 tagged_sentences.append((dataKey, sentence))
 
+        # Split words
         for group in tagged_sentences:
             tagged = group[1]
             for index in range(len(tagged)):

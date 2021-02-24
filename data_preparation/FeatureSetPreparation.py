@@ -25,6 +25,7 @@ class FeatureSetPreparation(DataProvider):
         x_test = []
         y_test: List[str] = []
 
+        # Extract and tag sentences
         for dataKey, dataValue in rawData.items():
             tokens: List[str] = dataValue.get("tokens")
             pos_tags = pos_tagger(tokens) if includePOStags else [("", "") for _ in tokens]
@@ -35,14 +36,17 @@ class FeatureSetPreparation(DataProvider):
                 labels = dataData[data_selector.type_name]  # todo add _uncertainty as well
                 sentence = list()
                 for index, token in enumerate(tokens):
+                    # Simplify labels
                     sentence.append((token, data_selector.type_symbol if labels[index].endswith(
                         data_selector.type_symbol) else "O"))
                 tagged_sentences.append((dataKey, sentence, pos_tags))
 
+        # Take tagged sentences and divide data into train and test data
         for group, tagged, pos_tags in tagged_sentences:
             for index in range(len(tagged)):
 
                 token = extract_word(tagged)[index]
+                # Extract features for a word in a sentence
                 features = extract_features(extract_word(tagged), extract_label(tagged), index, pos_tags)
                 label = tagged[index][1]
 

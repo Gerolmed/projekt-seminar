@@ -37,6 +37,7 @@ class LoadingUtils:
 
     @staticmethod
     def __open_file(filename: str):
+        """Loads json into dictionaries"""
         with open(file=filename, mode='r', encoding='utf8') as infile:
             data = json.load(infile)
             data_new: LoadedData = dict()

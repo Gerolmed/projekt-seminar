@@ -3,6 +3,7 @@ from functools import wraps
 
 
 def delta(fn):
+    """annotation that wraps a method and returns the execution time as a second parameter"""
     @wraps(fn)
     def calculate_delta(*args, **kwargs):
         start_time = time.time()

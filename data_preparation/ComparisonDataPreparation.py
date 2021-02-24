@@ -8,6 +8,7 @@ from utils.DataSelector import DataSelector
 
 
 class ComparisonDataPreparation(DataProvider):
+    """Prepares the data for the preparation classifier. Check out its docs for more information"""
     def execute(self, rawData: LoadedData, test_ids: List[str], data_selector: DataSelector) -> BasicData:
         rawData = copy.deepcopy(rawData)
 

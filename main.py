@@ -1,3 +1,11 @@
+# ##################################################################
+#
+# This is the projects main class. It is in charge of coordinating
+# and controlling the runs of the pipeline for the different data
+# provider selectors.
+#
+# ##################################################################
+
 import copy
 import os
 from typing import List, Dict, Tuple
@@ -89,17 +97,22 @@ classifier: List[Classifier] = [
 # ##################################################################
 
 def run_pipeline(data_selector: DataSelector):
+    """
+    Runs the pipeline.
+    """
     data_dict: Dict[str, Data] = dict()
     """Dictionary to store different data types by id"""
 
-    # Load raw and basic data
+    # Load raw data and the selected test ids from files.
+    # Also does general preprocessing
     [raw_data, test_ids] = LoadingUtils.read_data(r'./data_laptop_absa.json', r"./test_ids.json", data_selector)
-    # Create different base data formats
+
+    # Create different base data formats to be used by vectorizers and classifiers
     for data_provider in data_providers:
         data = data_provider.execute(raw_data, test_ids, data_selector)
         data_dict.setdefault(data.data_type, data)
 
-    # Vectorize data and add it to data list
+    # Vectorize data and add it to data list.
     for vectorizer in vectorizers:
         selected_data = data_dict.get(vectorizer.get_supported_data_type())
         data = vectorizer.vectorize(selected_data)
@@ -108,16 +121,20 @@ def run_pipeline(data_selector: DataSelector):
     results: List[Result] = []
     """Collects the results of the different classifier for further usages"""
 
-    # Run and execute every algorithm
+    # Run and execute every classifier
     for algorithm in classifier:
+
+        # Run for each data type that the classifier supports
         for data_type in algorithm.get_supported_data_types():
             selected_data = data_dict.get(data_type)
 
+            # Print a warning and skip if the data can't be found in the data dictionary
             if selected_data is None:
                 print(f"Skipping type {data_type} for {algorithm.get_name()} because data is missing!")
                 continue
 
             print(f"Executing {algorithm.get_name()} with {selected_data.data_type} ({data_selector.type_name})...")
+            # Actually execute the classifier
             result = algorithm.execute(selected_data)
 
             print(f"Finished executing {algorithm.get_name()} in {round((result.train_time + result.test_time), 3)} "
@@ -132,11 +149,12 @@ def run_pipeline(data_selector: DataSelector):
 # #################################
 
 def print_results(data_selector: DataSelector, results: List[Result]):
+    """Prints all results of a pipeline run in a fixed format"""
+
     print("============================================")
     print(f"Printing results for {data_selector.type_name}")
     print("============================================")
 
-    # Prints all results in a fixed format after execution
     for result in results:
         append_scores({"classifier": [result.algorithm_name],
                        "label": [data_selector.type_name],
@@ -169,6 +187,8 @@ def print_results(data_selector: DataSelector, results: List[Result]):
 
 def combine_results(total_results: Dict[DataSelector, List[Result]], index=0,
                     previous: List[List[Tuple[DataSelector, Result]]] = []) -> List[List[Tuple[DataSelector, Result]]]:
+    """Combines every single result of each data selectors with those of the
+     other selectors to calculate any possible combination"""
     if len(total_results.items()) <= index:
         return previous
 
@@ -188,6 +208,8 @@ def combine_results(total_results: Dict[DataSelector, List[Result]], index=0,
 
 
 def print_combination(combination: List[Tuple[DataSelector, Result]], f1_score: float):
+    """Prints a combination in fixed format"""
+
     used_text: str = "Used: "
     calc_text: str = "("
     for selector, result in combination:
@@ -237,19 +259,26 @@ def output_scores():
 # #################################
 
 def main():
+    """The actual main method of the program"""
     total_results: Dict[DataSelector, List[Result]] = dict()
+
+    # Run pipeline for each data selector
     for data_selector in data_selectors:
         total_results.setdefault(data_selector, run_pipeline(data_selector))
 
+    # Prints every individual result
     for data_selector, result in total_results.items():
         print_results(data_selector, result)
 
+    # Of less than to selectors skip looking for combinations
     if len(data_selectors) < 2:
         print("Not enough selectors for a combined f1 score")
         return
 
+    # Find all combinations
     all_combinations = combine_results(total_results)
 
+    # Calculate the combined mean f-score
     for combination in all_combinations:
         f1_score = 0
         for selector, result in combination:
